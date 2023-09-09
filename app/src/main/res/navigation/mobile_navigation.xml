@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.heartlink.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_finances"
+        android:name="com.example.heartlink.ui.finances.FinancesFragment"
+        android:label="@string/title_finances"
+        tools:layout="@layout/fragment_finances" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.heartlink.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_cooking"
+        android:name="com.example.heartlink.ui.cooking.ListsFragment"
+        android:label="@string/title_cooking"
+        tools:layout="@layout/fragment_cooking" />
 </navigation>

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">HeartLink</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_finances">Finanzen</string>
+    <string name="title_cooking">Kochen</string>
+    <string name="title_shopping">Einkaufen</string>
+    <string name="title_lists">Listen</string>
 </resources>
