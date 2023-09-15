@@ -23,7 +23,7 @@ class ShoppingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val shoppingViewModel =
-            ViewModelProvider(this).get(ListsViewModel::class.java)
+            ViewModelProvider(this).get(ShoppingViewModel::class.java)
 
         _binding = FragmentShoppingBinding.inflate(inflater, container, false)
         val root: View = binding.root
