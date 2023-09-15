@@ -12,23 +12,26 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_shopping"
-        android:name="com.example.heartlink.ui.cooking.ShoppingFragment"
-        android:label="@string/title_shopping" />
-    <fragment
-        android:id="@+id/navigation_lists"
-        android:name="com.example.heartlink.ui.cooking.ListsFragment"
-        android:label="@string/title_lists"
-        tools:layout="@layout/fragment_cooking" />
-    <fragment
         android:id="@+id/navigation_finances"
         android:name="com.example.heartlink.ui.finances.FinancesFragment"
         android:label="@string/title_finances"
         tools:layout="@layout/fragment_finances" />
 
     <fragment
+        android:id="@+id/navigation_shopping"
+        android:name="com.example.heartlink.ui.cooking.ShoppingFragment"
+        android:label="@string/title_shopping"
+        tools:layout="@layout/fragment_shopping"/>
+
+    <fragment
         android:id="@+id/navigation_cooking"
-        android:name="com.example.heartlink.ui.cooking.ListsFragment"
+        android:name="com.example.heartlink.ui.cooking.CookingFragment"
         android:label="@string/title_cooking"
         tools:layout="@layout/fragment_cooking" />
+
+    <fragment
+        android:id="@+id/navigation_lists"
+        android:name="com.example.heartlink.ui.cooking.ListsFragment"
+        android:label="@string/title_lists"
+        tools:layout="@layout/fragment_lists" />
 </navigation>
