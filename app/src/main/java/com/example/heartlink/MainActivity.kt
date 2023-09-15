@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_shopping, R.id.navigation_lists
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 }
