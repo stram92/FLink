@@ -17,6 +17,7 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,6 +28,11 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        val dateTimeTextView: TextView = binding.dateTimeText
+        homeViewModel.dateTimeText.observe(viewLifecycleOwner) {
+            dateTimeTextView.text = it
+        }
 
         val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner) {

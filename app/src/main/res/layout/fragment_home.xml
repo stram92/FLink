@@ -7,6 +7,30 @@
     tools:context=".ui.home.HomeFragment">
 
     <TextView
+        android:id="@+id/homeTopBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@color/grey_prime"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/dateTimeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/homeTopBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/homeTopBar" />
+
+    <TextView
         android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
