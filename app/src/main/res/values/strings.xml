@@ -5,4 +5,8 @@
     <string name="title_cooking">Kochen</string>
     <string name="title_shopping">Einkaufen</string>
     <string name="title_lists">Listen</string>
+    <string name="finances_overview">Übersicht</string>
+    <string name="finances_categories">Kategorien</string>
+    <string name="finances_statistics">Statistiken</string>
+    <string name="finances_abos"><![CDATA[Abos & Verträge]]></string>
 </resources>

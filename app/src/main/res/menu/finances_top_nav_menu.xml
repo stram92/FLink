@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/navigation_finances_overview"
+        android:title="@string/finances_overview"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/navigation_finances_abos"
+        android:title="@string/finances_abos"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/navigation_finances_categories"
+        android:title="@string/finances_categories"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/navigation_finances_statistics"
+        android:title="@string/finances_statistics"
+        app:showAsAction="always"/>
+</menu>
