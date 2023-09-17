@@ -9,4 +9,6 @@
     <string name="finances_categories">Kategorien</string>
     <string name="finances_statistics">Statistiken</string>
     <string name="finances_abos"><![CDATA[Abos & Verträge]]></string>
+    <string name="finances_all_entries">Alle Einträge</string>
+    <string name="finances_export">Exportieren</string>
 </resources>
