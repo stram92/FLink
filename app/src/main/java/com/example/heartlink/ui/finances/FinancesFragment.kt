@@ -7,7 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import com.example.heartlink.MainActivity
+import com.example.heartlink.R
 import com.example.heartlink.databinding.FragmentFinancesBinding
+import com.google.android.material.tabs.TabLayout
 
 class FinancesFragment : Fragment() {
 
@@ -33,6 +38,16 @@ class FinancesFragment : Fragment() {
             textView.text = it
         }
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val viewPager = view.findViewById<ViewPager>(R.id.finances_view_pager)
+        viewPager.adapter = financesViewPagerAdapter(childFragmentManager)
+
+        val tabLayout = view.findViewById<TabLayout>(R.id.finances_top_navigation)
+        tabLayout.setupWithViewPager(viewPager)
     }
 
     override fun onDestroyView() {
