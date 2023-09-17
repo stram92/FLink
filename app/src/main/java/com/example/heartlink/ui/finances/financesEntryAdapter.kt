@@ -34,9 +34,13 @@ class financesEntryAdapter(private val mList: List<financesItemsViewModel>) : Re
         if (holder.payer.text.equals("D")) {
             holder.framePayer.background = res.getDrawable(R.drawable.frame_denise)
             holder.financesFrame.background = res.getDrawable(R.drawable.frame_denise)
+            holder.payer.visibility = View.VISIBLE
+            holder.financesBoth.visibility = View.GONE
         } else if (holder.payer.text.equals("S")) {
             holder.framePayer.background = res.getDrawable(R.drawable.frame_sascha)
             holder.financesFrame.background = res.getDrawable(R.drawable.frame_sascha)
+            holder.payer.visibility = View.VISIBLE
+            holder.financesBoth.visibility = View.GONE
         } else {
             holder.framePayer.background = res.getDrawable(R.drawable.frame_both)
             holder.financesFrame.background = res.getDrawable(R.drawable.frame_both)
