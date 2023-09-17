@@ -11,4 +11,5 @@
     <string name="finances_abos"><![CDATA[Abos & Verträge]]></string>
     <string name="finances_all_entries">Alle Einträge</string>
     <string name="finances_export">Exportieren</string>
+    <string name="filter_finances">Filter Finances</string>
 </resources>

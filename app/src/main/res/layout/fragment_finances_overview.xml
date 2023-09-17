@@ -21,6 +21,8 @@
         android:id="@+id/finances_overview_headline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -58,7 +60,8 @@
             app:tint="@color/grey_text"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/filter_finances"/>
     </LinearLayout>
 
     <LinearLayout
@@ -146,7 +149,5 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"/>
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
