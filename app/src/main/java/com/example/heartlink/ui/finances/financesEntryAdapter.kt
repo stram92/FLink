@@ -1,10 +1,13 @@
 package com.example.heartlink.ui.finances
 
 
+import android.graphics.Color
 import com.example.heartlink.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -19,19 +22,36 @@ class financesEntryAdapter(private val mList: List<financesItemsViewModel>) : Re
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val ItemsViewModel = mList[position]
+        val ItemViewModel = mList[position]
+        val res = holder.itemView.context.resources
 
-        /*if (ItemsViewModel.payer.equals("B")) {
-            holder.heart.setImageResource(ItemsViewModel.heart)
+        holder.payer.text = ItemViewModel.payer
+        holder.description.text = ItemViewModel.description
+        holder.payedForAmount.text = ItemViewModel.payedForAmount
+        holder.amount.text = ItemViewModel.amount
+        holder.entryDate.text = ItemViewModel.entryDate
+
+        if (holder.payer.text.equals("D")) {
+            holder.framePayer.background = res.getDrawable(R.drawable.frame_denise)
+            holder.financesFrame.background = res.getDrawable(R.drawable.frame_denise)
+        } else if (holder.payer.text.equals("S")) {
+            holder.framePayer.background = res.getDrawable(R.drawable.frame_sascha)
+            holder.financesFrame.background = res.getDrawable(R.drawable.frame_sascha)
         } else {
-            holder.payer.text = ItemsViewModel.payer
-        }*/
+            holder.framePayer.background = res.getDrawable(R.drawable.frame_both)
+            holder.financesFrame.background = res.getDrawable(R.drawable.frame_both)
+            holder.payer.text = null
+            holder.payer.visibility = View.GONE
+            holder.financesBoth.visibility = View.VISIBLE
+        }
 
-        holder.payer.text = ItemsViewModel.payer
-        holder.description.text = ItemsViewModel.description
-        holder.payedForAmount.text = ItemsViewModel.payedForAmount.toString()
-        holder.amount.text = ItemsViewModel.amount.toString()
-        holder.entryDate.text = ItemsViewModel.entryDate
+        if (holder.payedForAmount.text.isEmpty()) {
+            holder.payedForAmount.visibility = View.GONE
+        } else if (holder.payedForAmount.text.contains("-")) {
+            holder.payedForAmount.setTextColor(Color.RED)
+        }
+
+
     }
 
     // return the number of the items in the list
@@ -46,5 +66,8 @@ class financesEntryAdapter(private val mList: List<financesItemsViewModel>) : Re
         val payedForAmount: TextView = itemView.findViewById(R.id.financesEntryPayedForAmount)
         val amount: TextView = itemView.findViewById(R.id.financesEntryAmount)
         val entryDate: TextView = itemView.findViewById(R.id.financesEntryEffectiveDate)
+        val framePayer: FrameLayout = itemView.findViewById(R.id.financesEntryIcon)
+        val financesFrame: FrameLayout = itemView.findViewById(R.id.financesFrame)
+        val financesBoth: ImageView = itemView.findViewById(R.id.financesBoth)
     }
 }

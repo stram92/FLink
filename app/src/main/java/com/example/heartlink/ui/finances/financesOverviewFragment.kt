@@ -26,8 +26,57 @@ class financesOverviewFragment : Fragment() {
 
         val financesData = ArrayList<financesItemsViewModel>()
 
-        for (i in 1 .. 20) {
-            financesData.add (financesItemsViewModel("S","Kino",(10.0).toFloat(),"01.09","B",(10.0).toFloat()))
+        for (i in 1 .. 10) {
+            financesData.add(
+                financesItemsViewModel(
+                    "S",
+                    "Kino",
+                    "- 15,00 €",
+                    "01.09",
+                    "B",
+                    "Denise: - 7,50 €"
+                )
+            )
+            financesData.add(
+                financesItemsViewModel(
+                    "D",
+                    "Einkaufen",
+                    "- 142,12 €",
+                    "01.09",
+                    "B",
+                    "Sascha: - 71,06 €"
+                )
+            )
+            financesData.add(
+                financesItemsViewModel(
+                    "D",
+                    "Pfeile",
+                    "- 300,00 €",
+                    "01.09",
+                    "D",
+                    null
+                )
+            )
+            financesData.add(
+                financesItemsViewModel(
+                    "D",
+                    "Gehalt",
+                    "+ 3.000,00 €",
+                    "01.09",
+                    "B",
+                    "Denise: + 3.000 €"
+                )
+            )
+            financesData.add(
+                financesItemsViewModel(
+                    "B",
+                    "Kredit",
+                    "- 2.000,00 €",
+                    "01.09",
+                    "B",
+                    null
+                )
+            )
         }
 
         val financesAdapter = financesEntryAdapter(financesData)

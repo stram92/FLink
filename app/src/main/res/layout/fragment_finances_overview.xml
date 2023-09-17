@@ -159,6 +159,7 @@
         app:layout_constraintBottom_toTopOf="@id/finances_overview_bottom"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
         tools:itemCount="8"
         tools:listitem="@layout/finances_entry_design">
 
