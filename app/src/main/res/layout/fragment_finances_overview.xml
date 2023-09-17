@@ -98,31 +98,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/text_finances_debtor"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toLeftOf="@id/text_finances_debts"
+                            android:text="Sascha:"
+                            android:textColor="@color/grey_text"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="4dp"/>
 
-                    <TextView
-                        android:id="@+id/text_finances_debtor"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text=" Denise: "
-                        android:textColor="@color/grey_text"
-                        android:textAlignment="textEnd"
-                        android:gravity="center"
-                        android:autoSizeTextType="uniform"
-                        android:layout_marginLeft="12dp" />
-
-                    <TextView
-                        android:id="@+id/text_finances_debts"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="-39,10 €"
-                        android:textColor="@color/red_minus"
-                        android:textAlignment="textStart"
-                        android:gravity="center"
-                        android:autoSizeTextType="uniform"
-                        android:layout_marginRight="12dp"/>
-
+                        <TextView
+                            android:id="@+id/text_finances_debts"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/text_finances_debtor"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:text="312,00 €"
+                            android:textColor="@color/red_minus"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="center"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginBottom="4dp"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
