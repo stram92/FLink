@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.FLink'
+    namespace 'com.saladstudios.FLink'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.FLink"
+        applicationId "com.saladstudios.FLink"
         minSdk 26
         targetSdk 33
         versionCode 1
