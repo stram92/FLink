@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.utility.json.addJsonEntryLocal
 import com.saladstudios.FLink.utility.json.readJsonFileLocal
-import com.saladstudios.FLink.utility.json.removeJsonEntryLocal
 import com.saladstudios.FLink.utility.json.wipeJsonEntriesLocal
 
 class FinancesOverviewFragment : Fragment() {
