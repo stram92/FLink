@@ -52,7 +52,11 @@ class financesEntryAdapter(private val mList: List<financesItemsViewModel>) : Re
         if (holder.payedForAmount.text.isEmpty()) {
             holder.payedForAmount.visibility = View.GONE
         } else if (holder.payedForAmount.text.contains("-")) {
+            holder.payedForAmount.visibility = View.VISIBLE
             holder.payedForAmount.setTextColor(Color.RED)
+        } else {
+            holder.payedForAmount.visibility = View.VISIBLE
+            holder.payedForAmount.setTextColor(Color.GREEN)
         }
 
 
