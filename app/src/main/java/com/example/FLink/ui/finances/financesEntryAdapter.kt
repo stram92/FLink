@@ -1,8 +1,8 @@
-package com.example.heartlink.ui.finances
+package com.example.FLink.ui.finances
 
 
 import android.graphics.Color
-import com.example.heartlink.R
+import com.example.FLink.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.example.heartlink.ui.home
+package com.example.FLink.ui.home
 
 import android.os.Handler
 import android.os.Looper

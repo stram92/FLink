@@ -1,4 +1,4 @@
-package com.example.heartlink
+package com.example.FLink
 
 import org.junit.Test
 

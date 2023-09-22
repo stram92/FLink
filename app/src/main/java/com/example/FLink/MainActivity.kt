@@ -1,4 +1,4 @@
-package com.example.heartlink
+package com.example.FLink
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.example.heartlink.databinding.ActivityMainBinding
+import com.example.FLink.R
+import com.example.FLink.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

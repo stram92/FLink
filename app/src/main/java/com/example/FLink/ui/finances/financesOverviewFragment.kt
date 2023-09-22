@@ -1,4 +1,4 @@
-package com.example.heartlink.ui.finances
+package com.example.FLink.ui.finances
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.heartlink.R
+import com.example.FLink.R
 
 class financesOverviewFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.example.heartlink.ui.cooking
+package com.example.FLink.ui.cooking
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

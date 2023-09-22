@@ -1,4 +1,4 @@
-package com.example.heartlink.ui.cooking
+package com.example.FLink.ui.cooking
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.heartlink.databinding.FragmentCookingBinding
+import com.example.FLink.databinding.FragmentListsBinding
 
-class CookingFragment : Fragment() {
+class ListsFragment : Fragment() {
 
-    private var _binding: FragmentCookingBinding? = null
+    private var _binding: FragmentListsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class CookingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val cookingViewModel =
-            ViewModelProvider(this).get(CookingViewModel::class.java)
+        val listsViewModel =
+            ViewModelProvider(this).get(ListsViewModel::class.java)
 
-        _binding = FragmentCookingBinding.inflate(inflater, container, false)
+        _binding = FragmentListsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textCooking
-        cookingViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textLists
+        listsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

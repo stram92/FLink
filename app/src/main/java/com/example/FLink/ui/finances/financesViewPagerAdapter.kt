@@ -1,12 +1,8 @@
-package com.example.heartlink.ui.finances
+package com.example.FLink.ui.finances
 
-import android.content.Context
-import android.content.res.Resources
-import androidx.core.content.res.TypedArrayUtils.getText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.example.heartlink.R
 
 class financesViewPagerAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm){
     override fun getCount(): Int {

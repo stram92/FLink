@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.heartlink'
+    namespace 'com.example.FLink'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.heartlink"
+        applicationId "com.example.FLink"
         minSdk 26
         targetSdk 33
         versionCode 1
