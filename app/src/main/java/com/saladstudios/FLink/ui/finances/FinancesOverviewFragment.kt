@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.utility.json.addJsonEntryLocal
 import com.saladstudios.FLink.utility.json.readJsonFileLocal
+import com.saladstudios.FLink.utility.json.removeJsonEntryLocal
 import com.saladstudios.FLink.utility.json.wipeJsonEntriesLocal
 
 class FinancesOverviewFragment : Fragment() {
@@ -31,17 +32,17 @@ class FinancesOverviewFragment : Fragment() {
 
         wipeJsonEntriesLocal(financesView.context)
 
-        addJsonEntryLocal(financesView.context,"S","Kino","- 15,00 €","01.09","B","Denise: - 7,50 €")
-        addJsonEntryLocal(financesView.context,"D","Einkaufen","- 142,12 €","01.09","B","Sascha: - 71,06 €")
-        addJsonEntryLocal(financesView.context,"D","Pfeile","- 300,00 €","01.09","D","")
-        addJsonEntryLocal(financesView.context,"D","Gehalt","+ 3.000,00 €","01.09","D","Denise: + 3.000 €")
-        addJsonEntryLocal(financesView.context,"B","Kredit","- 2.000,00 €","01.09","B","")
-        addJsonEntryLocal(financesView.context,"S","Lachgummi","- 3 €","22.09.","S","")
+        addJsonEntryLocal(financesView.context,"S","Kino","- 15,00 €","01.12.2023","B","Denise: - 7,50 €")
+        addJsonEntryLocal(financesView.context,"D","Einkaufen","- 142,12 €","01.08.2023","B","Sascha: - 71,06 €")
+        addJsonEntryLocal(financesView.context,"D","Pfeile","- 300,00 €","01.09.2023","D","")
+        addJsonEntryLocal(financesView.context,"D","Gehalt","+ 3.000,00 €","02.09.2023","D","Denise: + 3.000 €")
+        addJsonEntryLocal(financesView.context,"B","Kredit","- 2.000,00 €","01.09.2023","B","")
+        addJsonEntryLocal(financesView.context,"S","Lachgummi","- 3,00 €","22.09.2023","S","")
 
         val jsonArray = readJsonFileLocal(financesView.context)
 
         if (jsonArray != null) {
-            for (i in 0 until jsonArray.length())  {
+            for (i in jsonArray.length()-1 downTo 0)  {
                 val jsonObject = jsonArray.getJSONObject(i)
                 financesData.add(
                     FinancesItemsViewModel(

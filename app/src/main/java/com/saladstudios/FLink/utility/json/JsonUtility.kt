@@ -1,33 +1,38 @@
 package com.saladstudios.FLink.utility.json
 
 import android.content.Context
-import com.saladstudios.FLink.R
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.text.SimpleDateFormat
 
-// Funktion zum Lesen einer JSON-Datei aus dem "res/raw" Ordner
+private const val fileName = "financesdata.json"
+
 fun readJsonFileLocal(context: Context): JSONArray? {
-    val fileName = "financesdata.json"
     val file = File(context.filesDir, fileName)
 
     if (file.exists()) {
         val jsonContent = file.readText(Charsets.UTF_8)
         val jsonArray = JSONArray(jsonContent)
-        return jsonArray
+
+        val jsonList = mutableListOf<JSONObject>()
+
+        for (i in 0 until jsonArray.length()) {
+            jsonList.add(jsonArray.getJSONObject(i))
+        }
+
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy")
+
+        jsonList.sortBy { dateFormat.parse(it.getString("entryDate")) }
+
+        return JSONArray(jsonList)
     }
 
     return JSONArray()
 }
 
-fun addJsonEntryLocal(
-    context: Context,
-    payer: String,
-    description: String,
-    amount: String,
-    entryDate: String,
-    payedFor: String,
-    payedForAmount: String
+fun addJsonEntryLocal(context: Context,
+    payer: String, description: String, amount: String, entryDate: String, payedFor: String, payedForAmount: String
 ) {
     val jsonArray = readJsonFileLocal(context)
     val newEntry = JSONObject()
@@ -40,14 +45,25 @@ fun addJsonEntryLocal(
 
     jsonArray?.put(newEntry)
 
-
-    val fileName = "financesdata.json"
     val file = File(context.filesDir, fileName)
     file.writeText(jsonArray.toString(),Charsets.UTF_8)
 }
 
+fun removeJsonEntryLocal (context: Context, indexToRemove: Int) {
+    val file = File(context.filesDir, fileName)
+
+    if (file.exists()) {
+        val jsonArray = readJsonFileLocal(context)
+
+        if (indexToRemove >= 0 && indexToRemove < jsonArray!!.length()) {
+            jsonArray.remove(indexToRemove)
+        }
+
+        file.writeText(jsonArray.toString(),Charsets.UTF_8)
+    }
+}
+
 fun wipeJsonEntriesLocal (context: Context) {
-    val fileName = "financesdata.json"
     val file = File(context.filesDir, fileName)
     if (file.exists()) {
         file.delete()
