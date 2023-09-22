@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
+import com.saladstudios.FLink.utility.json.readJsonFile
 
-class financesOverviewFragment : Fragment() {
+class FinancesOverviewFragment : Fragment() {
 
     @Override
     override fun onCreateView(
@@ -24,9 +25,29 @@ class financesOverviewFragment : Fragment() {
         financesRecyclerView.layoutManager = LinearLayoutManager(view?.context)
         financesRecyclerView.setHasFixedSize(true)
 
-        val financesData = ArrayList<financesItemsViewModel>()
+        val financesData = ArrayList<FinancesItemsViewModel>()
 
-        for (i in 1 .. 10) {
+        val jsonArray = readJsonFile(financesView.context, R.raw.financesdata)
+
+        for (i in 1 .. 3) {
+            if (jsonArray != null) {
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject = jsonArray.getJSONObject(i)
+                    financesData.add(
+                        FinancesItemsViewModel(
+                            jsonObject.getString("payer"),
+                            jsonObject.getString("description"),
+                            jsonObject.getString("amount"),
+                            jsonObject.getString("entryDate"),
+                            jsonObject.getString("payedFor"),
+                            jsonObject.getString("payedForAmount")
+                        )
+                    )
+                }
+            }
+        }
+
+        /*for (i in 1 .. 10) {
             financesData.add(
                 financesItemsViewModel(
                     "S",
@@ -77,9 +98,9 @@ class financesOverviewFragment : Fragment() {
                     null
                 )
             )
-        }
+        }*/
 
-        val financesAdapter = financesEntryAdapter(financesData)
+        val financesAdapter = FinancesEntryAdapter(financesData)
 
         financesRecyclerView.adapter = financesAdapter
 

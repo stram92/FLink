@@ -1,0 +1,50 @@
+[
+  {
+    "payer": "S",
+    "description": "Kino",
+    "amount": "- 15,00 €",
+    "entryDate": "01.09",
+    "payedFor": "B",
+    "payedForAmount": "Denise: - 7,50 €"
+  },
+  {
+    "payer": "D",
+    "description": "Einkaufen",
+    "amount": "- 142,12 €",
+    "entryDate": "01.09",
+    "payedFor": "B",
+    "payedForAmount": "Sascha: - 71,06 €"
+  },
+  {
+    "payer": "D",
+    "description": "Pfeile",
+    "amount": "- 300,00 €",
+    "entryDate": "01.09",
+    "payedFor": "D",
+    "payedForAmount": ""
+  },
+  {
+    "payer": "D",
+    "description": "Gehalt",
+    "amount": "+ 3.000,00 €",
+    "entryDate": "01.09",
+    "payedFor": "D",
+    "payedForAmount": "Denise: + 3.000 €"
+  },
+  {
+    "payer": "B",
+    "description": "Kredit",
+    "amount": "- 2.000,00 €",
+    "entryDate": "01.09",
+    "payedFor": "B",
+    "payedForAmount": ""
+  },
+  {
+    "payer": "S",
+    "description": "Lachgummi",
+    "amount": "- 3 €",
+    "entryDate": "22.09.",
+    "payedFor": "S",
+    "payedForAmount": ""
+  }
+]

@@ -37,7 +37,7 @@ class FinancesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewPager = view.findViewById<ViewPager>(R.id.finances_view_pager)
-        viewPager.adapter = financesViewPagerAdapter(childFragmentManager)
+        viewPager.adapter = FinancesViewPagerAdapter(childFragmentManager)
 
         val tabLayout = view.findViewById<TabLayout>(R.id.finances_top_navigation)
         tabLayout.setupWithViewPager(viewPager)

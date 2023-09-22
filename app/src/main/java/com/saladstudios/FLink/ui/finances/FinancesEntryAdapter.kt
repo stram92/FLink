@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
 
-class financesEntryAdapter(private val mList: List<financesItemsViewModel>) : RecyclerView.Adapter<financesEntryAdapter.ViewHolder>() {
+class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>) : RecyclerView.Adapter<FinancesEntryAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.finances_entry_design, parent, false)

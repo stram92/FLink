@@ -4,18 +4,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class financesViewPagerAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT){
+class FinancesViewPagerAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT){
     override fun getCount(): Int {
         return 4;
     }
 
     override fun getItem(position: Int): Fragment {
         when(position) {
-            0 -> return financesOverviewFragment()
-            1 -> return financesAbosFragment()
-            2 -> return financesCategoriesFragment()
-            3 -> return financesStatisticsFragment()
-            else -> return financesOverviewFragment()
+            0 -> return FinancesOverviewFragment()
+            1 -> return FinancesAbosFragment()
+            2 -> return FinancesCategoriesFragment()
+            3 -> return FinancesStatisticsFragment()
+            else -> return FinancesOverviewFragment()
         }
     }
 
