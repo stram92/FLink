@@ -26,6 +26,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name=".ui.finances.FinancesNewEntry">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.saladstudios.FLink.ui.finances.FinancesNewEntry" />
+        </activity>
     </application>
 
 </manifest>

@@ -145,7 +145,7 @@
             android:id="@+id/button_finances_add"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Finanzeintrag erstellen"
+            android:text="@string/finances_add_entry"
             android:textColor="@color/white"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"/>

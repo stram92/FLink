@@ -12,4 +12,8 @@
     <string name="finances_all_entries">Alle Einträge</string>
     <string name="finances_export">Exportieren</string>
     <string name="filter_finances">Filter Finances</string>
+    <string name="finances_add_entry">Finanzeintrag erstellen</string>
+    <string name="finances_new_entry">Neuer Finanzeintrag</string>
+    <string name="description">Beschreibung</string>
+    <string name="currency">EUR</string>
 </resources>
