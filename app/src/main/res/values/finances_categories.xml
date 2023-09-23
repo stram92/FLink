@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="finances_category_array">
+        <item>Fixkosten</item>
+        <item>Freizeit</item>
+        <item>Shoppen</item>
+        <item>Einkaufen</item>
+        <item>Katzen</item>
+        <item>Auto</item>
+        <item>Essen</item>
+        <item>Kredit</item>
+        <item>Versicherungen</item>
+        <item>Sparen</item>
+        <item>Gesundheit</item>
+        <item>Wohnen/Garten</item>
+    </string-array>
+</resources>

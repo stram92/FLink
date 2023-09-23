@@ -19,55 +19,232 @@
             android:text="@string/finances_new_entry"
             android:fontFamily="@font/quicksandbold"
             android:textColor="@color/grey_text"
-            android:textSize="20dp"
+            android:textSize="20sp"
+            android:layout_gravity="center"
             />
     </androidx.appcompat.widget.Toolbar>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/finances_new_entry_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/finances_new_entry_toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/finances_new_entry_amount"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintHorizontal_weight="2">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/description" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/finances_new_entry_amount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/finances_new_entry_toolbar"
-        app:layout_constraintStart_toEndOf="@id/finances_new_entry_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintHorizontal_weight="1">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/currency" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <CalendarView
-        android:id="@+id/finances_calendar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/finances_new_entry_description"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/finances_new_entry_toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/grey_prime"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/finances_new_entry_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/finances_new_entry_amount"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintHorizontal_weight="2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/finances_new_entry_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/finances_new_entry_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintHorizontal_weight="1"
+                >
+                <EditText
+                    android:id="@+id/editTextNumberSigned"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/currency"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <CalendarView
+                android:id="@+id/finances_new_entry_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_description"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/grey_prime"
+                android:foregroundTint="@color/green_prime"
+                />
+
+            <TableLayout
+                android:id="@+id/finances_new_entry_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_calendar"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
+                <TableRow>
+                    <TextView android:text=""
+                        android:layout_weight="0.2"
+                        android:layout_width="0dp"/>
+                    <TextView android:text="@string/finances_new_entry_pays"
+                        android:layout_weight="0.1"
+                        android:layout_width="0dp"
+                        android:textColor="@color/green_prime"
+                        android:gravity="center"/>
+                    <TextView android:text="@string/finances_new_entry_for"
+                        android:layout_weight="0.17"
+                        android:layout_width="0dp"
+                        android:textColor="@color/green_prime"
+                        android:gravity="center"/>
+                    <TextView android:text=""
+                        android:layout_weight="0.2"
+                        android:layout_width="0dp"/>
+                </TableRow>
+                <TableRow android:padding="4dp">
+                    <TextView android:text="@string/denise"
+                        android:layout_weight="0.2"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksandmedium"
+                        android:textSize="24sp"
+                        android:gravity="start"/>
+
+                    <!--ToggleButton
+                        android:id="@+id/toggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:textOn="JA"
+                        android:textOff="NEIN"/-->
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/finances_new_entry_switch_denise"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1"/>
+
+                    <CheckBox
+                        android:id="@+id/finances_new_entry_for_denise"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.17"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/finances_new_entry_amount_denise"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.2"
+                        >
+                        <EditText
+                            android:id="@+id/finances_new_entry_amount_for_denise"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/currency"
+                            android:inputType="numberDecimal"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </TableRow>
+                <TableRow android:padding="4dp">
+                    <TextView android:text="@string/sascha"
+                        android:layout_weight="0.2"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:fontFamily="@font/quicksandmedium"
+                        android:textSize="24sp"
+                        android:gravity="start"/>
+
+                    <!--ToggleButton
+                        android:id="@+id/toggleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:textOn="JA"
+                        android:textOff="NEIN"/-->
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/finances_new_entry_switch_sascha"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"/>
+
+                    <CheckBox
+                        android:id="@+id/finances_new_entry_for_sascha"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.17"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/finances_new_entry_amount_sascha"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.2"
+                        >
+                        <EditText
+                            android:id="@+id/finances_new_entry_amount_for_sascha"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/currency"
+                            android:inputType="numberDecimal"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/finances_new_entry_category_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/finances_new_entry_category"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="30dp"
+                android:text="@string/category"
+                android:textColor="@color/green_prime"
+                android:textSize="24sp"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <Spinner
+                android:id="@+id/finances_new_entry_category"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
+                app:layout_constraintStart_toEndOf="@id/finances_new_entry_category_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="30dp"
+                app:layout_constraintHorizontal_weight="1"
+                android:background="@color/grey_prime"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_category_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/quicksandmedium"
+                android:textSize="24sp"
+                android:textColor="@color/white_numbers"
+                android:text="@string/save"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
