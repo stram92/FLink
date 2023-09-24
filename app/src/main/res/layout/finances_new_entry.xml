@@ -78,24 +78,11 @@
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <CalendarView
-                android:id="@+id/finances_new_entry_calendar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_description"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/grey_prime"
-                android:foregroundTint="@color/green_prime"
-                />
-
             <TableLayout
                 android:id="@+id/finances_new_entry_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_calendar"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_description"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="16dp"
@@ -141,7 +128,8 @@
                         android:layout_gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.1"/>
+                        android:layout_weight="0.1"
+                        android:checked="true"/>
 
                     <CheckBox
                         android:id="@+id/finances_new_entry_for_denise"
@@ -187,8 +175,7 @@
                         android:id="@+id/finances_new_entry_switch_sascha"
                         android:layout_gravity="center"
                         android:layout_width="0dp"
-                        android:layout_weight="0.1"
-                        android:checked="true"/>
+                        android:layout_weight="0.1"/>
 
                     <CheckBox
                         android:id="@+id/finances_new_entry_for_sascha"
@@ -215,11 +202,24 @@
                 </TableRow>
             </TableLayout>
 
+            <CalendarView
+                android:id="@+id/finances_new_entry_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/grey_prime"
+                android:foregroundTint="@color/green_prime"
+                />
+
             <TextView
                 android:id="@+id/finances_new_entry_category_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_calendar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/finances_new_entry_category"
                 android:layout_marginTop="8dp"
@@ -233,7 +233,7 @@
                 android:id="@+id/finances_new_entry_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_calendar"
                 app:layout_constraintStart_toEndOf="@id/finances_new_entry_category_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="8dp"

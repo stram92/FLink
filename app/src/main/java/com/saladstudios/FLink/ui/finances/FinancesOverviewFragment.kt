@@ -49,17 +49,19 @@ class FinancesOverviewFragment : Fragment() {
 
         val financesData = ArrayList<FinancesItemsViewModel>()
 
-
+/*
         wipeJsonEntriesLocal(view.context)
 
-        /*
+
         addJsonEntryLocal(view.context,"S","Kino","- 15,00 €","01.12.2023","B","Denise: - 7,50 €")
         addJsonEntryLocal(view.context,"D","Einkaufen","- 142,12 €","01.08.2023","B","Sascha: - 71,06 €")
         addJsonEntryLocal(view.context,"D","Pfeile","- 300,00 €","01.09.2023","D","")
         addJsonEntryLocal(view.context,"D","Gehalt","+ 3.000,00 €","02.09.2023","D","Denise: + 3.000 €")
         addJsonEntryLocal(view.context,"B","Kredit","- 2.000,00 €","01.09.2023","B","")
         addJsonEntryLocal(view.context,"S","Lachgummi","- 3,00 €","22.09.2023","S","")
-        */
+
+ */
+
 
         financesRecyclerView.adapter = refreshFinances (view.context)
 
@@ -100,15 +102,13 @@ class FinancesOverviewFragment : Fragment() {
 
         if (requestCode==LAUNCH_NEW_ENTRY) {
             if (resultCode== Activity.RESULT_OK){
-                    Log.d("FLinkTest","SEas")
-                    Log.d("FLinkTest",data!!.getStringExtra("payer").toString())
                     addJsonEntryLocal(requireContext(),
                         data!!.getStringExtra("payer").toString(),
-                        data!!.getStringExtra("description").toString(),
-                        data!!.getStringExtra("amount").toString(),
-                        data!!.getStringExtra("entryDate").toString(),
-                        data!!.getStringExtra("payedFor").toString(),
-                        data!!.getStringExtra("payedForAmount").toString()
+                        data.getStringExtra("description").toString(),
+                        data.getStringExtra("amount").toString(),
+                        data.getStringExtra("entryDate").toString(),
+                        data.getStringExtra("payedFor").toString(),
+                        data.getStringExtra("payedForAmount").toString()
                     )
 
             }
