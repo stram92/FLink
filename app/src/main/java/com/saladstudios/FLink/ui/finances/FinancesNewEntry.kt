@@ -1,29 +1,24 @@
 package com.saladstudios.FLink.ui.finances
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.text.InputType
 import android.text.format.DateFormat
 import android.util.Log
-import android.view.View
+import android.widget.CalendarView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.text.set
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FinancesNewEntryBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumber
-import java.text.DecimalFormat
-import java.text.NumberFormat
 import java.util.*
 import kotlin.math.round
-import kotlin.math.roundToLong
 
 class FinancesNewEntry : AppCompatActivity() {
     private lateinit var binding: FinancesNewEntryBinding
+
+    private lateinit var date: String;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +40,7 @@ class FinancesNewEntry : AppCompatActivity() {
         binding.financesNewEntryAmountSaschaInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) reDistributePriceSascha()}
         binding.financesNewEntryForSascha.setOnClickListener { checkSascha() }
         binding.financesNewEntryForDenise.setOnClickListener { checkDenise() }
+        binding.financesNewEntryCalendar.setOnDateChangeListener() { calView: CalendarView, year: Int, month: Int, dayOfMonth: Int -> dateChanged(calView,year,month,dayOfMonth) }
     }
 
     fun newEntrySave() {
@@ -205,5 +201,16 @@ class FinancesNewEntry : AppCompatActivity() {
         } else if (!binding.financesNewEntrySwitchDenise.isChecked) {
             binding.financesNewEntrySwitchSascha.isChecked=true
         }
+    }
+
+    private fun dateChanged(calView: CalendarView, year: Int, month: Int, dayOfMonth: Int) {
+        // Create calender object with which will have system date time.
+        val calender: Calendar = Calendar.getInstance()
+
+        // Set attributes in calender object as per selected date.
+        calender.set(year, month, dayOfMonth)
+
+        // Now set calenderView with this calender object to highlight selected date on UI.
+        calView.setDate(calender.timeInMillis, true, true)
     }
 }

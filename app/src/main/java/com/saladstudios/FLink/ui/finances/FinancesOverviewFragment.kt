@@ -49,10 +49,10 @@ class FinancesOverviewFragment : Fragment() {
 
         val financesData = ArrayList<FinancesItemsViewModel>()
 
-/*
+
         wipeJsonEntriesLocal(view.context)
 
-
+/*
         addJsonEntryLocal(view.context,"S","Kino","- 15,00 €","01.12.2023","B","Denise: - 7,50 €")
         addJsonEntryLocal(view.context,"D","Einkaufen","- 142,12 €","01.08.2023","B","Sascha: - 71,06 €")
         addJsonEntryLocal(view.context,"D","Pfeile","- 300,00 €","01.09.2023","D","")
