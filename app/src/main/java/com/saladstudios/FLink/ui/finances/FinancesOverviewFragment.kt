@@ -20,8 +20,6 @@ import com.saladstudios.FLink.utility.json.wipeJsonEntriesLocal
 import java.time.format.DateTimeFormatter
 
 class FinancesOverviewFragment : Fragment() {
-    private val viewModel: FinancesViewModel by viewModels()
-
     private lateinit var binding: FragmentFinancesOverviewBinding
     private lateinit var financesNewIntent: Intent
 
@@ -33,7 +31,7 @@ class FinancesOverviewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         //Inflate the layout XML file and return a binding object instance
         binding = FragmentFinancesOverviewBinding.inflate(inflater, container, false)
         return binding.root
@@ -42,12 +40,10 @@ class FinancesOverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        financesRecyclerView = view.findViewById<RecyclerView>(R.id.financesRecyclerView)
+        financesRecyclerView = view.findViewById(R.id.financesRecyclerView)
 
         financesRecyclerView.layoutManager = LinearLayoutManager(view.context)
         financesRecyclerView.setHasFixedSize(true)
-
-        val financesData = ArrayList<FinancesItemsViewModel>()
 
 /*
         wipeJsonEntriesLocal(view.context)
@@ -59,7 +55,6 @@ class FinancesOverviewFragment : Fragment() {
         addJsonEntryLocal(view.context,"D","Gehalt","+ 3.000,00 €","02.09.2023","D","Denise: + 3.000 €")
         addJsonEntryLocal(view.context,"B","Kredit","- 2.000,00 €","01.09.2023","B","")
         addJsonEntryLocal(view.context,"S","Lachgummi","- 3,00 €","22.09.2023","S","")
-
  */
 
 
