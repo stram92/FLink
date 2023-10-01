@@ -4,20 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FragmentFinancesOverviewBinding
 import com.saladstudios.FLink.utility.json.addJsonEntryLocal
 import com.saladstudios.FLink.utility.json.readJsonFileLocal
-import com.saladstudios.FLink.utility.json.wipeJsonEntriesLocal
-import java.time.format.DateTimeFormatter
 
 class FinancesOverviewFragment : Fragment() {
     private lateinit var binding: FragmentFinancesOverviewBinding
@@ -61,7 +57,7 @@ class FinancesOverviewFragment : Fragment() {
         financesRecyclerView.adapter = refreshFinances (view.context)
 
 
-        binding.buttonFinancesAdd.setOnClickListener { financesAdd(view.context, financesRecyclerView) }
+        binding.buttonFinancesAdd.setOnClickListener { financesAdd(view.context) }
 
     }
 
@@ -84,10 +80,10 @@ class FinancesOverviewFragment : Fragment() {
                 )
             }
         }
-        return FinancesEntryAdapter(financesData)
+        return FinancesEntryAdapter(financesData) { financesAdd(context) }
     }
 
-    private fun financesAdd(context: Context, financesRecyclerView: RecyclerView) {
+    private fun financesAdd(context: Context) {
         financesNewIntent = Intent(context, FinancesNewEntry::class.java)
         startActivityForResult(financesNewIntent,LAUNCH_NEW_ENTRY)
     }

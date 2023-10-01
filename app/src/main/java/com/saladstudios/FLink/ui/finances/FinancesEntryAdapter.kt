@@ -1,6 +1,7 @@
 package com.saladstudios.FLink.ui.finances
 
 
+import android.content.ClipData.Item
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
 
-class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>) : RecyclerView.Adapter<FinancesEntryAdapter.ViewHolder>() {
+class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>,
+                           private val listener: (FinancesItemsViewModel) -> Unit) : RecyclerView.Adapter<FinancesEntryAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.finances_entry_design, parent, false)
@@ -23,6 +26,7 @@ class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>) : Re
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val ItemViewModel = mList[position]
+
         val res = holder.itemView.context.resources
 
         holder.payer.text = ItemViewModel.payer
@@ -59,7 +63,8 @@ class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>) : Re
             holder.payedForAmount.setTextColor(Color.GREEN)
         }
 
-
+        holder.bind(ItemViewModel)
+        holder.itemView.setOnClickListener { listener(ItemViewModel) }
     }
 
     // return the number of the items in the list
@@ -77,5 +82,13 @@ class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>) : Re
         val framePayer: FrameLayout = itemView.findViewById(R.id.financesEntryIcon)
         val financesFrame: FrameLayout = itemView.findViewById(R.id.financesFrame)
         val financesBoth: ImageView = itemView.findViewById(R.id.financesBoth)
+
+        fun bind (item: FinancesItemsViewModel) {
+            payer.text = item.payer
+            description.text = item.description
+            payedForAmount.text = item.payedForAmount
+            amount.text = item.amount
+            entryDate.text = item.entryDate
+        }
     }
 }
