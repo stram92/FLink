@@ -19,8 +19,7 @@ import kotlin.math.round
 
 class FinancesNewEntry : AppCompatActivity() {
     private lateinit var binding: FinancesNewEntryBinding
-
-    private lateinit var date: String;
+    private var id: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +32,70 @@ class FinancesNewEntry : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        var extras: Bundle? = intent.extras
+        if (extras != null) {
+            id = extras.getInt("id")
+
+            if (extras.getString("payer") == "S") {
+                binding.financesNewEntrySwitchSascha.isChecked=true
+                binding.financesNewEntrySwitchDenise.isChecked=false
+            } else if (extras.getString("payer") == "D") {
+                binding.financesNewEntrySwitchSascha.isChecked=false
+                binding.financesNewEntrySwitchDenise.isChecked=true
+            }
+
+            if (extras.getString("payedForAmount")=="") {
+                if(extras.getString("payer")=="S" ) {
+                    binding.financesNewEntryForSascha.isChecked=true
+                    binding.financesNewEntryForDenise.isChecked=false
+                    binding.financesNewEntryAmountSaschaInput.setText(extras.getString("amount"))
+                } else if (extras.getString("payer")=="D") {
+                    binding.financesNewEntryForSascha.isChecked=false
+                    binding.financesNewEntryForDenise.isChecked=true
+                    binding.financesNewEntryAmountDeniseInput.setText(extras.getString("amount"))
+                }
+            } else {
+                binding.financesNewEntryForSascha.isChecked=true
+                binding.financesNewEntryForDenise.isChecked=true
+
+                if(extras.getString("payedFor")=="S") {
+                    binding.financesNewEntryAmountSaschaInput.setText(extras.getString("payedForAmount"))
+                    binding.financesNewEntryAmountDeniseInput.setText(prettyPrintNumber((extras.getString("amount")!!.toDouble() - extras.getString("payedForAmount")!!.toDouble()).toString()))
+                } else {
+                    binding.financesNewEntryAmountDeniseInput.setText(extras.getString("payedForAmount"))
+                    binding.financesNewEntryAmountSaschaInput.setText(prettyPrintNumber((extras.getString("amount")!!.toDouble() - extras.getString("payedForAmount")!!.toDouble()).toString()))
+                }
+            }
+
+            if (extras.getString("entryDate") != null) {
+                dateChanged(
+                    binding.financesNewEntryCalendar,
+                    extras.getString("entryDate")!!.substring(6,10).toInt(),
+                    extras.getString("entryDate")!!.substring(3,5).toInt()-1,
+                    extras.getString("entryDate")!!.substring(0,2).toInt()
+                )
+            }
+
+            binding.financesNewEntryDeductionAddition.isChecked = extras.getString("sign")=="+"
+
+            binding.financesNewEntryDescriptionInput.setText(extras.getString("description"))
+            binding.financesNewEntryAmountInput.setText(prettyPrintNumber(extras.getString("amount")!!))
+
+        }
 
         binding.financesNewEntrySave.setOnClickListener { newEntrySave() }
         binding.financesNewEntrySwitchSascha.setOnClickListener { switchSascha() }
         binding.financesNewEntrySwitchDenise.setOnClickListener { switchDenise() }
         binding.financesNewEntryAmountInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountInput)}
-        binding.financesNewEntryAmountInput.setOnKeyListener{ _, keyCode, event -> sharePrice(keyCode,event)}
+        binding.financesNewEntryAmountInput.setOnKeyListener{ _, _, event -> sharePrice(event)}
         binding.financesNewEntryAmountDeniseInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountDeniseInput)}
-        binding.financesNewEntryAmountDeniseInput.setOnKeyListener{ amountInput: View, keyCode: Int, event: KeyEvent -> reDistributePriceDenise(amountInput,keyCode,event)}
+        binding.financesNewEntryAmountDeniseInput.setOnKeyListener{ amountInput: View, keyCode: Int, event: KeyEvent -> reDistributePriceDenise(
+            event
+        )}
         binding.financesNewEntryAmountSaschaInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountSaschaInput)}
-        binding.financesNewEntryAmountSaschaInput.setOnKeyListener{ amountInput: View, keyCode: Int, event: KeyEvent -> reDistributePriceSascha(amountInput,keyCode,event)}
+        binding.financesNewEntryAmountSaschaInput.setOnKeyListener{ amountInput: View, keyCode: Int, event: KeyEvent -> reDistributePriceSascha(
+            event
+        )}
         binding.financesNewEntryForSascha.setOnClickListener { checkSascha() }
         binding.financesNewEntryForDenise.setOnClickListener { checkDenise() }
         binding.financesNewEntryCalendar.setOnDateChangeListener() { calView: CalendarView, year: Int, month: Int, dayOfMonth: Int -> dateChanged(calView,year,month,dayOfMonth) }
@@ -65,14 +118,14 @@ class FinancesNewEntry : AppCompatActivity() {
             toast.show()
         } else {
             var returnIntent = Intent()
-            var payer = ""
-            var payedfor = ""
+            var payer: String
             var payedforamount = ""
             val dateMillis: Long = binding.financesNewEntryCalendar.date
             val date = Date(dateMillis)
-            var entryDate = ""
 
-            var amount = prettyPrintNumber(binding.financesNewEntryAmountInput.text.toString())
+            var sign: String
+
+            var amount = binding.financesNewEntryAmountInput.text.toString()
 
             if (binding.financesNewEntrySwitchSascha.isChecked) {
                 payer = "S"
@@ -82,30 +135,39 @@ class FinancesNewEntry : AppCompatActivity() {
                 payer = "B"
             }
 
-            payedfor = if (binding.financesNewEntryForSascha.isChecked && !binding.financesNewEntryForDenise.isChecked) {
+            var payedfor: String = if (payer == "D" && binding.financesNewEntryForSascha.isChecked) {
                 "S"
-            } else if (!binding.financesNewEntryForSascha.isChecked && binding.financesNewEntryForDenise.isChecked) {
+            } else if (payer == "S" && binding.financesNewEntryForDenise.isChecked) {
                 "D"
             } else {
-                "B"
+                ""
             }
 
-            if (payedfor.equals("B")) {
-                if (payer.equals("S")) {
-                    payedforamount = "Denise: "+ prettyPrintNumber(binding.financesNewEntryAmountDeniseInput.text.toString())
-                } else if (payer.equals("D")) {
-                    payedforamount = "Sascha: "+ prettyPrintNumber(binding.financesNewEntryAmountSaschaInput.text.toString())
-                }
+            if (payedfor=="S") {
+                payedforamount=binding.financesNewEntryAmountSaschaInput.text.toString()
+            } else if (payedfor=="D") {
+                payedforamount=binding.financesNewEntryAmountDeniseInput.text.toString()
+            } else {
+                payedforamount=""
             }
 
-            entryDate = DateFormat.format("dd", date).toString() + "." + DateFormat.format("MM", date)
+            if (binding.financesNewEntryDeductionAddition.isEnabled) {
+                sign = "-"
+            } else {
+                sign = "+"
+            }
+
+            var entryDate: String =
+                DateFormat.format("dd", date).toString() + "." + DateFormat.format("MM", date)
                 .toString() + "." + DateFormat.format("yyyy", date).toString()
 
+            if (id != -1) {
+                returnIntent.putExtra("id",id)
+            }
+
             returnIntent.putExtra("payer", payer)
-            returnIntent.putExtra(
-                "description",
-                binding.financesNewEntryDescriptionInput.text.toString()
-            )
+            returnIntent.putExtra("description",binding.financesNewEntryDescriptionInput.text.toString())
+            returnIntent.putExtra("sign",sign)
             returnIntent.putExtra("amount", amount)
             returnIntent.putExtra("entryDate", entryDate)
             returnIntent.putExtra("payedFor", payedfor)
@@ -117,7 +179,7 @@ class FinancesNewEntry : AppCompatActivity() {
         }
     }
 
-    fun sharePrice(keyCode: Int, event: KeyEvent): Boolean {
+    fun sharePrice(event: KeyEvent): Boolean {
 
         if (event.action == KeyEvent.ACTION_UP)
         {
@@ -146,7 +208,7 @@ class FinancesNewEntry : AppCompatActivity() {
         }
     }
 
-    fun reDistributePriceSascha(amountInput: View, keyCode: Int, event: KeyEvent): Boolean {
+    fun reDistributePriceSascha(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_UP)
         {
             if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
@@ -160,7 +222,7 @@ class FinancesNewEntry : AppCompatActivity() {
         return false
     }
 
-    fun reDistributePriceDenise(amountInput: View, keyCode: Int, event: KeyEvent): Boolean {
+    fun reDistributePriceDenise(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_UP)
         {
             if (!binding.financesNewEntryAmountInput.text.isEmpty()) {

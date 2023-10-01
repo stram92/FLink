@@ -5,6 +5,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.text.SimpleDateFormat
+import kotlin.math.sign
 
 private const val fileName = "financesdata.json"
 
@@ -32,12 +33,13 @@ fun readJsonFileLocal(context: Context): JSONArray? {
 }
 
 fun addJsonEntryLocal(context: Context,
-    payer: String, description: String, amount: String, entryDate: String, payedFor: String, payedForAmount: String
+    payer: String, description: String, sign: String, amount: String, entryDate: String, payedFor: String, payedForAmount: String
 ) {
     val jsonArray = readJsonFileLocal(context)
     val newEntry = JSONObject()
     newEntry.put("payer", payer)
     newEntry.put("description", description)
+    newEntry.put("sign", sign)
     newEntry.put("amount", amount)
     newEntry.put("entryDate", entryDate)
     newEntry.put("payedFor", payedFor)

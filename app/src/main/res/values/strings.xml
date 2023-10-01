@@ -16,10 +16,12 @@
     <string name="finances_new_entry">Neuer Finanzeintrag</string>
     <string name="description">Beschreibung</string>
     <string name="currency">EUR</string>
-    <string name="finances_new_entry_pays">Zahlt</string>
+    <string name="finances_new_entry_from">Von</string>
     <string name="finances_new_entry_for">Für</string>
     <string name="denise">Denise</string>
     <string name="sascha">Sascha</string>
     <string name="category">Kategorie</string>
     <string name="save">Speichern</string>
+    <string name="deduction">Ausgabe</string>
+    <string name="addition">Einnahme</string>
 </resources>

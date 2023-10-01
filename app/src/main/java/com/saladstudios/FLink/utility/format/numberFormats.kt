@@ -3,10 +3,24 @@ package com.saladstudios.FLink.utility.format
 import java.text.DecimalFormat
 import java.util.*
 
-fun prettyPrintNumber (amount: String): String {
-    var formatter = DecimalFormat.getInstance(Locale.ROOT)
-    formatter.minimumFractionDigits=2
-    formatter.maximumFractionDigits=2
+fun prettyPrintNumberWithCurrency (amount: String): String {
+    return if (amount != null && amount != "") {
+        var formatter = DecimalFormat.getInstance(Locale.ROOT)
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.format(amount.toDouble()) + " €"
+    } else {
+        ""
+    }
+}
 
-    return "- "+formatter.format(amount.toDouble())+" €"
+fun prettyPrintNumber (amount: String): String {
+    return if (amount != null && amount != "") {
+        var formatter = DecimalFormat.getInstance(Locale.ROOT)
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.format(amount.toDouble())
+    } else {
+        ""
+    }
 }

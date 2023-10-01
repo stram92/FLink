@@ -34,17 +34,26 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ToggleButton
+                android:id="@+id/finances_new_entry_deduction_addition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textOff="@string/deduction"
+                android:textOn="@string/addition"
+                android:textSize="24sp"
+                android:fontFamily="@font/quicksandmedium"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/finances_new_entry_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_deduction_addition"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/finances_new_entry_amount"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintHorizontal_weight="2">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -61,12 +70,11 @@
                 android:id="@+id/finances_new_entry_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_deduction_addition"
                 app:layout_constraintStart_toEndOf="@id/finances_new_entry_description"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintHorizontal_weight="1"
                 >
                 <EditText
@@ -84,14 +92,12 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/finances_new_entry_description"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp">
+                android:layout_marginTop="10dp">
                 <TableRow>
                     <TextView android:text=""
                         android:layout_weight="0.2"
                         android:layout_width="0dp"/>
-                    <TextView android:text="@string/finances_new_entry_pays"
+                    <TextView android:text="@string/finances_new_entry_from"
                         android:layout_weight="0.1"
                         android:layout_width="0dp"
                         android:textColor="@color/green_prime"
@@ -209,8 +215,6 @@
                 app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:background="@color/grey_prime"
                 android:foregroundTint="@color/green_prime"
                 />
@@ -223,7 +227,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/finances_new_entry_category"
                 android:layout_marginTop="8dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="14dp"
                 android:text="@string/category"
                 android:textColor="@color/green_prime"
                 android:textSize="24sp"

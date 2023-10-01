@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
+import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
+import com.saladstudios.FLink.utility.format.prettyPrintNumberWithCurrency
 
 class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>,
                            private val listener: (FinancesItemsViewModel) -> Unit) : RecyclerView.Adapter<FinancesEntryAdapter.ViewHolder>() {
@@ -32,7 +33,7 @@ class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>,
         holder.payer.text = ItemViewModel.payer
         holder.description.text = ItemViewModel.description
         holder.payedForAmount.text = ItemViewModel.payedForAmount
-        holder.amount.text = ItemViewModel.amount
+        holder.amount.text = ItemViewModel.payedForAmount
         holder.entryDate.text = ItemViewModel.entryDate
 
         if (holder.payer.text.equals("D")) {
@@ -55,11 +56,13 @@ class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>,
 
         if (holder.payedForAmount.text.isEmpty()) {
             holder.payedForAmount.visibility = View.GONE
-        } else if (holder.payedForAmount.text.contains("-")) {
-            holder.payedForAmount.visibility = View.VISIBLE
-            holder.payedForAmount.setTextColor(Color.RED)
         } else {
             holder.payedForAmount.visibility = View.VISIBLE
+        }
+
+        if (ItemViewModel.sign == "-") {
+            holder.payedForAmount.setTextColor(Color.RED)
+        } else {
             holder.payedForAmount.setTextColor(Color.GREEN)
         }
 
@@ -86,9 +89,19 @@ class FinancesEntryAdapter(private val mList: List<FinancesItemsViewModel>,
         fun bind (item: FinancesItemsViewModel) {
             payer.text = item.payer
             description.text = item.description
-            payedForAmount.text = item.payedForAmount
-            amount.text = item.amount
+
+            if (item.payedForAmount!="") {
+                if (item.payedFor == "S") {
+                    payedForAmount.text =
+                        "Sascha: " + item.sign + " " + item.payedForAmount?.let { prettyPrintNumberWithCurrency(it) }
+                } else if (item.payedFor == "D") {
+                    payedForAmount.text =
+                        "Denise: " + item.sign + " " + item.payedForAmount?.let { prettyPrintNumberWithCurrency(it) }
+                }
+            }
+            amount.text = item.sign + " " + prettyPrintNumberWithCurrency(item.amount)
             entryDate.text = item.entryDate
         }
+
     }
 }
