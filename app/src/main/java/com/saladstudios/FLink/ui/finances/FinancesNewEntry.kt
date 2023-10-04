@@ -49,10 +49,12 @@ class FinancesNewEntry : AppCompatActivity() {
                     binding.financesNewEntryForSascha.isChecked=true
                     binding.financesNewEntryForDenise.isChecked=false
                     binding.financesNewEntryAmountSaschaInput.setText(extras.getString("amount"))
+                    binding.financesNewEntryAmountDeniseInput.setText("0.00")
                 } else if (extras.getString("payer")=="D") {
                     binding.financesNewEntryForSascha.isChecked=false
                     binding.financesNewEntryForDenise.isChecked=true
                     binding.financesNewEntryAmountDeniseInput.setText(extras.getString("amount"))
+                    binding.financesNewEntryAmountSaschaInput.setText("0.00")
                 }
             } else {
                 binding.financesNewEntryForSascha.isChecked=true
@@ -111,9 +113,9 @@ class FinancesNewEntry : AppCompatActivity() {
         } else if (binding.financesNewEntryAmountInput.text.isEmpty()){
             val toast = Toast.makeText(this, "Wert darf nicht leer sein!", Toast.LENGTH_SHORT)
             toast.show()
-        } else if ((binding.financesNewEntryAmountSaschaInput.text.toString().toDouble()+
-                    binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()) >
-                    binding.financesNewEntryAmountInput.text.toString().toDouble()) {
+        } else if ((binding.financesNewEntryAmountSaschaInput.text.toString().ifBlank { "0.00" }.toDouble()+
+                    binding.financesNewEntryAmountDeniseInput.text.toString().ifBlank { "0.00" }.toDouble()) >
+                    binding.financesNewEntryAmountInput.text.toString().ifBlank { "0.00" }.toDouble()) {
             val toast = Toast.makeText(this, "Wertverteilung zu Hoch!", Toast.LENGTH_SHORT)
             toast.show()
         } else {
