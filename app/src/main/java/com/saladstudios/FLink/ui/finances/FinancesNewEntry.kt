@@ -113,10 +113,10 @@ class FinancesNewEntry : AppCompatActivity() {
         } else if (binding.financesNewEntryAmountInput.text.isEmpty()){
             val toast = Toast.makeText(this, "Wert darf nicht leer sein!", Toast.LENGTH_SHORT)
             toast.show()
-        } else if ((binding.financesNewEntryAmountSaschaInput.text.toString().ifBlank { "0.00" }.toDouble()+
-                    binding.financesNewEntryAmountDeniseInput.text.toString().ifBlank { "0.00" }.toDouble()) >
-                    binding.financesNewEntryAmountInput.text.toString().ifBlank { "0.00" }.toDouble()) {
-            val toast = Toast.makeText(this, "Wertverteilung zu Hoch!", Toast.LENGTH_SHORT)
+        } else if (round((binding.financesNewEntryAmountSaschaInput.text.toString().ifBlank { "0.00" }.toDouble()+
+                    binding.financesNewEntryAmountDeniseInput.text.toString().ifBlank { "0.00" }.toDouble())*100) >
+                    round(binding.financesNewEntryAmountInput.text.toString().ifBlank { "0.00" }.toDouble()*100)) {
+            val toast = Toast.makeText(this, "Wertverteilung zu Hoch!: "+ (binding.financesNewEntryAmountSaschaInput.text.toString().toDouble()+binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()).toString() +"="+binding.financesNewEntryAmountInput.text.toString(), Toast.LENGTH_SHORT)
             toast.show()
         } else {
             var returnIntent = Intent()
