@@ -29,7 +29,7 @@
     <string name="date">Datum</string>
     <string name="date_colon">Datum:</string>
     <string name="dummyDate">17.07.1992</string>
-    <string name="modfiyFinanceEntry">Finanzeintrag bearbeiten</string>
+    <string name="modfiyFinanceEntry">Finanzeintrag</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="delete_u_sure">Möchtest du den Eintrag wirklich löschen?</string>
