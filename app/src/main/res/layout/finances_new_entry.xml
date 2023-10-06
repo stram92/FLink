@@ -207,8 +207,7 @@
                         android:id="@+id/finances_new_entry_amount_denise"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
-                        android:layout_weight="0.2"
-                        >
+                        android:layout_weight="0.2">
                         <EditText
                             android:id="@+id/finances_new_entry_amount_denise_input"
                             android:layout_width="match_parent"
