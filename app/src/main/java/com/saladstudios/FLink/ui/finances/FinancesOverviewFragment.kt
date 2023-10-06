@@ -45,7 +45,7 @@ class FinancesOverviewFragment : Fragment() {
         financesRecyclerView.layoutManager = LinearLayoutManager(view.context)
         financesRecyclerView.setHasFixedSize(true)
 
-
+/*
         wipeJsonEntriesLocal(view.context)
 
 
@@ -55,7 +55,7 @@ class FinancesOverviewFragment : Fragment() {
         addJsonEntryLocal(view.context,"D","Gehalt","+","3000.00","02.09.2023","D","3000.00")
         addJsonEntryLocal(view.context,"B","Kredit","-","2000.00","01.09.2023","","")
         addJsonEntryLocal(view.context,"S","Lachgummi","-","3.00","22.09.2023","","")
-
+*/
 
 
         financesRecyclerView.adapter = refreshFinances (view.context)
