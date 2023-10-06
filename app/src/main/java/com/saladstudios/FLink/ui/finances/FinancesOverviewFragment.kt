@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -104,8 +105,11 @@ class FinancesOverviewFragment : Fragment() {
             binding.textFinancesDebts.text = prettyPrintNumberWithCurrency(payedAmount.toString())
         } else if (payedAmount>0) {
             binding.textFinancesDebtor.text = getString(R.string.sascha_colon)
+            payedAmount *= -1
             binding.textFinancesDebts.text = prettyPrintNumberWithCurrency(payedAmount.toString())
         }
+        binding.textFinancesDebts.setAutoSizeTextTypeUniformWithConfiguration(1,24,1,TypedValue.COMPLEX_UNIT_DIP)
+        binding.textFinancesDebtor.setAutoSizeTextTypeUniformWithConfiguration(1,24,1,TypedValue.COMPLEX_UNIT_DIP)
 
         return FinancesEntryAdapter(financesData) { item -> financesEdit(context,item) }
     }
