@@ -180,14 +180,6 @@
                         android:textSize="24sp"
                         android:gravity="start"/>
 
-                    <!--ToggleButton
-                        android:id="@+id/toggleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:textOn="JA"
-                        android:textOff="NEIN"/-->
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/finances_new_entry_switch_denise"
                         android:layout_gravity="center"
@@ -226,14 +218,6 @@
                         android:textSize="24sp"
                         android:gravity="start"/>
 
-                    <!--ToggleButton
-                        android:id="@+id/toggleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:textOn="JA"
-                        android:textOff="NEIN"/-->
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/finances_new_entry_switch_sascha"
                         android:layout_gravity="center"
@@ -265,17 +249,6 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </TableRow>
             </TableLayout>
-
-            <!--CalendarView
-                android:id="@+id/finances_new_entry_calendar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="10dp"
-                android:background="@color/grey_prime"
-                android:foregroundTint="@color/green_prime"
-                /-->
 
             <TextView
                 android:id="@+id/finances_new_entry_category_text"
