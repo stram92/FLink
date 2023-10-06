@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FragmentFinancesOverviewBinding
+import com.saladstudios.FLink.utility.format.prettyPrintNumberWithCurrency
 import com.saladstudios.FLink.utility.json.addJsonEntryLocal
 import com.saladstudios.FLink.utility.json.readJsonFileLocal
 import com.saladstudios.FLink.utility.json.removeJsonEntryLocal
@@ -66,24 +67,46 @@ class FinancesOverviewFragment : Fragment() {
     private fun refreshFinances (context: Context) : FinancesEntryAdapter{
         val financesData = ArrayList<FinancesItemsViewModel>()
         val jsonArray = readJsonFileLocal(context)
+        var payedAmount = 0.00
 
         if (jsonArray != null) {
             for (i in jsonArray.length()-1 downTo 0)  {
                 val jsonObject = jsonArray.getJSONObject(i)
-                financesData.add(
-                    FinancesItemsViewModel(
-                        i,
+                financesData.add(FinancesItemsViewModel(i,
                         jsonObject.getString("payer"),
                         jsonObject.getString("description"),
                         jsonObject.getString("sign"),
                         jsonObject.getString("amount"),
                         jsonObject.getString("entryDate"),
                         jsonObject.getString("payedFor"),
-                        jsonObject.getString("payedForAmount")
-                    )
-                )
+                        jsonObject.getString("payedForAmount")))
+
+                if (jsonObject.getString("payedFor")!=null) {
+                    if (jsonObject.getString("payedFor")=="S") {
+                        if (jsonObject.getString("sign")=="-") {
+                            payedAmount += jsonObject.getString("payedForAmount").toDouble()
+                        } else {
+                            payedAmount -= jsonObject.getString("payedForAmount").toDouble()
+                        }
+                    } else if (jsonObject.getString("payedFor")=="D"){
+                        if (jsonObject.getString("sign")=="-") {
+                            payedAmount -= jsonObject.getString("payedForAmount").toDouble()
+                        } else {
+                            payedAmount += jsonObject.getString("payedForAmount").toDouble()
+                        }
+                    }
+                }
             }
         }
+
+        if (payedAmount<0) {
+            binding.textFinancesDebtor.text = getString(R.string.denise_colon)
+            binding.textFinancesDebts.text = prettyPrintNumberWithCurrency(payedAmount.toString())
+        } else if (payedAmount>0) {
+            binding.textFinancesDebtor.text = getString(R.string.sascha_colon)
+            binding.textFinancesDebts.text = prettyPrintNumberWithCurrency(payedAmount.toString())
+        }
+
         return FinancesEntryAdapter(financesData) { item -> financesEdit(context,item) }
     }
 

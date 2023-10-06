@@ -19,12 +19,15 @@
     <string name="finances_new_entry_from">Von</string>
     <string name="finances_new_entry_for">Für</string>
     <string name="denise">Denise</string>
+    <string name="denise_colon">Denise:</string>
     <string name="sascha">Sascha</string>
+    <string name="sascha_colon">Sascha:</string>
     <string name="category">Kategorie</string>
     <string name="save">Speichern</string>
     <string name="deduction">Ausgabe</string>
     <string name="addition">Einnahme</string>
-    <string name="date">Datum:</string>
+    <string name="date">Datum</string>
+    <string name="date_colon">Datum:</string>
     <string name="dummyDate">17.07.1992</string>
     <string name="modfiyFinanceEntry">Finanzeintrag bearbeiten</string>
 </resources>
