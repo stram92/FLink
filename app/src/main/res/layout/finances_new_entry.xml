@@ -14,6 +14,7 @@
         android:background="@color/grey_prime"
         android:theme="?attr/actionBarTheme">
         <TextView
+            android:id="@+id/finances_new_entry_toolbar_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/finances_new_entry"

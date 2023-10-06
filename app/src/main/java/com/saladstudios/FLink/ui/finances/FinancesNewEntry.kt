@@ -39,6 +39,8 @@ class FinancesNewEntry : AppCompatActivity() {
 
         var extras: Bundle? = intent.extras
         if (extras != null) {
+            binding.financesNewEntryToolbarText.text = "Finanzeintrag bearbeiten"
+
             id = extras.getInt("id")
 
             if (extras.getString("payer") == "S") {
