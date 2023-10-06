@@ -117,8 +117,9 @@
                             android:gravity="center"
                             android:maxLines="1"
                             app:layout_constraintHorizontal_weight="2"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="4dp"/>
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginBottom="2dp"/>
 
                         <TextView
                             android:id="@+id/text_finances_debts"
@@ -132,8 +133,9 @@
                             android:gravity="center"
                             android:maxLines="1"
                             app:layout_constraintHorizontal_weight="3"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginLeft="4dp"/>
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginBottom="2dp"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </FrameLayout>
