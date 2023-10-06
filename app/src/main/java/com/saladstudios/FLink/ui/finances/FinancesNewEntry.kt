@@ -39,7 +39,7 @@ class FinancesNewEntry : AppCompatActivity() {
 
         var extras: Bundle? = intent.extras
         if (extras != null) {
-            binding.financesNewEntryToolbarText.text = "Finanzeintrag bearbeiten"
+            binding.financesNewEntryToolbarText.text = getString(R.string.modfiyFinanceEntry)
 
             id = extras.getInt("id")
 

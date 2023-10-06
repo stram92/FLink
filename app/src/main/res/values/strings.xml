@@ -26,4 +26,5 @@
     <string name="addition">Einnahme</string>
     <string name="date">Datum:</string>
     <string name="dummyDate">17.07.1992</string>
+    <string name="modfiyFinanceEntry">Finanzeintrag bearbeiten</string>
 </resources>
