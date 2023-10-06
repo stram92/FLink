@@ -33,7 +33,7 @@ fun readJsonFileLocal(context: Context): JSONArray? {
 }
 
 fun addJsonEntryLocal(context: Context,
-    payer: String, description: String, sign: String, amount: String, entryDate: String, payedFor: String, payedForAmount: String
+    payer: String, description: String, sign: String, amount: String, entryDate: String, payedFor: String, payedForAmount: String, category: String
 ) {
     val jsonArray = readJsonFileLocal(context)
     val newEntry = JSONObject()
@@ -44,6 +44,7 @@ fun addJsonEntryLocal(context: Context,
     newEntry.put("entryDate", entryDate)
     newEntry.put("payedFor", payedFor)
     newEntry.put("payedForAmount", payedForAmount)
+    newEntry.put("category", category)
 
     jsonArray?.put(newEntry)
 

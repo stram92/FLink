@@ -80,9 +80,10 @@ class FinancesOverviewFragment : Fragment() {
                         jsonObject.getString("amount"),
                         jsonObject.getString("entryDate"),
                         jsonObject.getString("payedFor"),
-                        jsonObject.getString("payedForAmount")))
+                        jsonObject.getString("payedForAmount"),
+                        jsonObject.optString("category",getString(R.string.not_available))))
 
-                if (jsonObject.getString("payedFor")!=null) {
+                if (jsonObject.getString("payedFor")!="") {
                     if (jsonObject.getString("payedFor")=="S") {
                         if (jsonObject.getString("sign")=="-") {
                             payedAmount += jsonObject.getString("payedForAmount").toDouble()
@@ -129,6 +130,7 @@ class FinancesOverviewFragment : Fragment() {
         financesIntent.putExtra("entryDate",item.entryDate)
         financesIntent.putExtra("payedFor",item.payedFor)
         financesIntent.putExtra("payedForAmount",item.payedForAmount)
+        financesIntent.putExtra("category",item.category)
         startActivityForResult(financesIntent,LAUNCH_EDIT_ENTRY)
     }
 
@@ -145,7 +147,8 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("amount").toString(),
                         data.getStringExtra("entryDate").toString(),
                         data.getStringExtra("payedFor").toString(),
-                        data.getStringExtra("payedForAmount").toString()
+                        data.getStringExtra("payedForAmount").toString(),
+                        data.getStringExtra("category").toString()
                     )
                 }
             } else if (requestCode==LAUNCH_EDIT_ENTRY) {
@@ -160,7 +163,8 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("amount").toString(),
                         data.getStringExtra("entryDate").toString(),
                         data.getStringExtra("payedFor").toString(),
-                        data.getStringExtra("payedForAmount").toString()
+                        data.getStringExtra("payedForAmount").toString(),
+                        data.getStringExtra("category").toString()
                     )
                 }
             }

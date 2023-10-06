@@ -23,6 +23,7 @@
     <string name="sascha">Sascha</string>
     <string name="sascha_colon">Sascha:</string>
     <string name="category">Kategorie</string>
+    <string name="category_colon">Kategorie:</string>
     <string name="save">Speichern</string>
     <string name="deduction">Ausgabe</string>
     <string name="addition">Einnahme</string>
@@ -36,4 +37,17 @@
     <string name="remove_entry">Eintrag löschen</string>
     <string name="cash_up">Kassensturz</string>
     <string name="delete">Löschen</string>
+    <string name="not_available">…</string>
+    <string name="groceries">Einkaufen</string>
+    <string name="shopping">Shoppen</string>
+    <string name="monthly_costs">Fixkosten</string>
+    <string name="loan">Kredit</string>
+    <string name="insurance">Versicherung</string>
+    <string name="spare_time">Freizeit</string>
+    <string name="pets">Tierbedarf</string>
+    <string name="eat">Essen</string>
+    <string name="car">Auto</string>
+    <string name="save_money">Sparen</string>
+    <string name="health">Gesundheit</string>
+    <string name="living">Wohnung/Garten</string>
 </resources>

@@ -8,9 +8,7 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.KeyEvent
 import android.view.View
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -36,6 +34,8 @@ class FinancesNewEntry : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        binding.financesNewEntryCategory.adapter = initializeCategoryAdapter()
 
         var extras: Bundle? = intent.extras
         if (extras != null) {
@@ -94,6 +94,10 @@ class FinancesNewEntry : AppCompatActivity() {
                 financesEntryCalendar.set(Calendar.MONTH,extras.getString("entryDate")!!.substring(3,5).toInt()-1)
                 financesEntryCalendar.set(Calendar.DAY_OF_MONTH,extras.getString("entryDate")!!.substring(0,2).toInt())
                 binding.financesNewEntryDate.setText(extras.getString("entryDate"))
+            }
+
+            if (extras.getString("category")!="") {
+                binding.financesNewEntryCategory.setSelection(buildCategories().indexOf(extras.getString("category")))
             }
 
             binding.financesNewEntryDeductionAddition.isChecked = extras.getString("sign")=="+"
@@ -185,6 +189,7 @@ class FinancesNewEntry : AppCompatActivity() {
             var date = financesEntryCalendar.time
             var sign: String
             var amount = binding.financesNewEntryAmountInput.text.toString()
+            var category = binding.financesNewEntryCategory.selectedItem.toString()
 
             if (binding.financesNewEntrySwitchSascha.isChecked) {
                 payer = "S"
@@ -220,6 +225,10 @@ class FinancesNewEntry : AppCompatActivity() {
                 DateFormat.format("dd", date).toString() + "." + DateFormat.format("MM", date)
                 .toString() + "." + DateFormat.format("yyyy", date).toString()
 
+            if (category == getString(R.string.not_available)) {
+                category = ""
+            }
+
             if (id != -1) {
                 returnIntent.putExtra("id",id)
             }
@@ -231,6 +240,7 @@ class FinancesNewEntry : AppCompatActivity() {
             returnIntent.putExtra("entryDate", entryDate)
             returnIntent.putExtra("payedFor", payedfor)
             returnIntent.putExtra("payedForAmount", payedforamount)
+            returnIntent.putExtra("category", category)
 
             setResult(Activity.RESULT_OK, returnIntent)
 
@@ -348,5 +358,34 @@ class FinancesNewEntry : AppCompatActivity() {
         } else if (!binding.financesNewEntrySwitchDenise.isChecked) {
             binding.financesNewEntrySwitchSascha.isChecked=true
         }
+    }
+
+    private fun initializeCategoryAdapter ():ArrayAdapter<String> {
+        var spinnerArray = buildCategories()
+
+        var adapter: ArrayAdapter<String> = ArrayAdapter(this, R.layout.finances_new_entry_category_spinner,spinnerArray)
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        return adapter
+    }
+
+    private fun buildCategories ():ArrayList<String> {
+        var categories: ArrayList<String> = ArrayList()
+        categories.add(getString(R.string.not_available))
+        categories.add(getString(R.string.groceries))
+        categories.add(getString(R.string.shopping))
+        categories.add(getString(R.string.monthly_costs))
+        categories.add(getString(R.string.loan))
+        categories.add(getString(R.string.insurance))
+        categories.add(getString(R.string.spare_time))
+        categories.add(getString(R.string.pets))
+        categories.add(getString(R.string.eat))
+        categories.add(getString(R.string.car))
+        categories.add(getString(R.string.save_money))
+        categories.add(getString(R.string.health))
+        categories.add(getString(R.string.living))
+
+        return categories
     }
 }
