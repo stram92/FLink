@@ -1,12 +1,14 @@
 package com.saladstudios.FLink.ui.finances
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.KeyEvent
 import android.view.View
 import android.widget.CalendarView
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,12 +16,15 @@ import androidx.appcompat.widget.Toolbar
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FinancesNewEntryBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumber
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 import kotlin.math.round
 
 class FinancesNewEntry : AppCompatActivity() {
     private lateinit var binding: FinancesNewEntryBinding
     private var id: Int = -1
+    private var financesEntryCalendar:Calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,12 +88,10 @@ class FinancesNewEntry : AppCompatActivity() {
             }
 
             if (extras.getString("entryDate") != null) {
-                dateChanged(
-                    binding.financesNewEntryCalendar,
-                    extras.getString("entryDate")!!.substring(6,10).toInt(),
-                    extras.getString("entryDate")!!.substring(3,5).toInt()-1,
-                    extras.getString("entryDate")!!.substring(0,2).toInt()
-                )
+                financesEntryCalendar.set(Calendar.YEAR,extras.getString("entryDate")!!.substring(6,10).toInt())
+                financesEntryCalendar.set(Calendar.MONTH,extras.getString("entryDate")!!.substring(3,5).toInt()-1)
+                financesEntryCalendar.set(Calendar.DAY_OF_MONTH,extras.getString("entryDate")!!.substring(0,2).toInt())
+                binding.financesNewEntryDate.setText(extras.getString("entryDate"))
             }
 
             binding.financesNewEntryDeductionAddition.isChecked = extras.getString("sign")=="+"
@@ -96,6 +99,8 @@ class FinancesNewEntry : AppCompatActivity() {
             binding.financesNewEntryDescriptionInput.setText(extras.getString("description"))
             binding.financesNewEntryAmountInput.setText(prettyPrintNumber(extras.getString("amount")!!))
 
+        } else {
+            updateDate()
         }
 
         binding.financesNewEntrySave.setOnClickListener { newEntrySave() }
@@ -113,10 +118,30 @@ class FinancesNewEntry : AppCompatActivity() {
         )}
         binding.financesNewEntryForSascha.setOnClickListener { checkSascha() }
         binding.financesNewEntryForDenise.setOnClickListener { checkDenise() }
-        binding.financesNewEntryCalendar.setOnDateChangeListener() { calView: CalendarView, year: Int, month: Int, dayOfMonth: Int -> dateChanged(calView,year,month,dayOfMonth) }
+
+        val dateSetListener = DatePickerDialog.OnDateSetListener{view: DatePicker,year: Int, month: Int, day: Int ->
+            financesEntryCalendar.set(Calendar.YEAR,year)
+            financesEntryCalendar.set(Calendar.MONTH,month)
+            financesEntryCalendar.set(Calendar.DAY_OF_MONTH,day)
+            updateDate()
+        }
+
+        binding.financesNewEntryDateLayout.setOnClickListener {
+            DatePickerDialog(this,dateSetListener,
+                financesEntryCalendar.get(Calendar.YEAR),
+                financesEntryCalendar.get(Calendar.MONTH),
+                financesEntryCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
     }
 
-    fun newEntrySave() {
+    private fun updateDate() {
+        var myFormat = "dd.MM.yyyy"
+        var dateFormat = SimpleDateFormat(myFormat, Locale.GERMANY)
+        binding.financesNewEntryDate.text=dateFormat.format(financesEntryCalendar.time)
+    }
+
+    private fun newEntrySave() {
         if (!binding.financesNewEntryForSascha.isChecked && !binding.financesNewEntryForDenise.isChecked) {
             val toast = Toast.makeText(this, "Für wen wurde bezahlt? Bitte auswählen", Toast.LENGTH_SHORT)
             toast.show()
@@ -134,12 +159,9 @@ class FinancesNewEntry : AppCompatActivity() {
         } else {
             var returnIntent = Intent()
             var payer: String
-            var payedforamount = ""
-            val dateMillis: Long = binding.financesNewEntryCalendar.date
-            val date = Date(dateMillis)
-
+            var payedforamount: String
+            var date = financesEntryCalendar.time
             var sign: String
-
             var amount = binding.financesNewEntryAmountInput.text.toString()
 
             if (binding.financesNewEntrySwitchSascha.isChecked) {
@@ -194,7 +216,7 @@ class FinancesNewEntry : AppCompatActivity() {
         }
     }
 
-    fun sharePrice(event: KeyEvent): Boolean {
+    private fun sharePrice(event: KeyEvent): Boolean {
 
         if (event.action == KeyEvent.ACTION_UP)
         {
@@ -217,13 +239,13 @@ class FinancesNewEntry : AppCompatActivity() {
         return false
     }
 
-    fun prettyPrintAmout(AmountInput: EditText) {
+    private fun prettyPrintAmout(AmountInput: EditText) {
         if (AmountInput.text.isNotEmpty()) {
             AmountInput.setText(String.format(Locale.US,"%.2f", (AmountInput.text.toString().toDouble())))
         }
     }
 
-    fun reDistributePriceSascha(event: KeyEvent): Boolean {
+    private fun reDistributePriceSascha(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_UP)
         {
             if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
@@ -237,7 +259,7 @@ class FinancesNewEntry : AppCompatActivity() {
         return false
     }
 
-    fun reDistributePriceDenise(event: KeyEvent): Boolean {
+    private fun reDistributePriceDenise(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_UP)
         {
             if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
@@ -251,7 +273,7 @@ class FinancesNewEntry : AppCompatActivity() {
         return false
     }
 
-    fun checkSascha() {
+    private fun checkSascha() {
         binding.financesNewEntryAmountSaschaInput.isEnabled=binding.financesNewEntryForSascha.isChecked
 
         if (!binding.financesNewEntryAmountSaschaInput.isEnabled) {
@@ -270,7 +292,7 @@ class FinancesNewEntry : AppCompatActivity() {
         }
     }
 
-    fun checkDenise() {
+    private fun checkDenise() {
         binding.financesNewEntryAmountDeniseInput.isEnabled=binding.financesNewEntryForDenise.isChecked
 
         if (!binding.financesNewEntryAmountDeniseInput.isEnabled) {
@@ -289,7 +311,7 @@ class FinancesNewEntry : AppCompatActivity() {
         }
     }
 
-    fun switchSascha () {
+    private fun switchSascha () {
         if (binding.financesNewEntrySwitchSascha.isChecked) {
             binding.financesNewEntrySwitchDenise.isChecked=false
         } else if (!binding.financesNewEntrySwitchSascha.isChecked) {
@@ -298,22 +320,11 @@ class FinancesNewEntry : AppCompatActivity() {
 
     }
 
-    fun switchDenise () {
+    private fun switchDenise () {
         if (binding.financesNewEntrySwitchDenise.isChecked) {
             binding.financesNewEntrySwitchSascha.isChecked=false
         } else if (!binding.financesNewEntrySwitchDenise.isChecked) {
             binding.financesNewEntrySwitchSascha.isChecked=true
         }
-    }
-
-    private fun dateChanged(calView: CalendarView, year: Int, month: Int, dayOfMonth: Int) {
-        // Create calender object with which will have system date time.
-        val calender: Calendar = Calendar.getInstance()
-
-        // Set attributes in calender object as per selected date.
-        calender.set(year, month, dayOfMonth)
-
-        // Now set calenderView with this calender object to highlight selected date on UI.
-        calView.setDate(calender.timeInMillis, true, true)
     }
 }

@@ -24,4 +24,6 @@
     <string name="save">Speichern</string>
     <string name="deduction">Ausgabe</string>
     <string name="addition">Einnahme</string>
+    <string name="date">Datum:</string>
+    <string name="dummyDate">17.07.1992</string>
 </resources>

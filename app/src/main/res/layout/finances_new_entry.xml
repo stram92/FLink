@@ -41,6 +41,8 @@
                 android:id="@+id/finances_new_entry_deduction_addition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:textOff="@string/deduction"
                 android:textOn="@string/addition"
                 android:textSize="24sp"
@@ -86,11 +88,56 @@
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/finances_new_entry_date_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/grey_prime">
+                <TextView
+                    android:id="@+id/finances_new_entry_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/finances_new_entry_date"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/date"
+                    android:textSize="24sp"
+                    android:textColor="@color/grey_text"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/finances_new_entry_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/finances_new_entry_date_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/dummyDate"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textSize="24sp"
+                    android:textColor="@color/grey_text"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="4dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TableLayout
                 android:id="@+id/finances_new_entry_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_description"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_date_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="10dp">
                 <TableRow>
@@ -208,7 +255,7 @@
                 </TableRow>
             </TableLayout>
 
-            <CalendarView
+            <!--CalendarView
                 android:id="@+id/finances_new_entry_calendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -217,13 +264,13 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/grey_prime"
                 android:foregroundTint="@color/green_prime"
-                />
+                /-->
 
             <TextView
                 android:id="@+id/finances_new_entry_category_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_calendar"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/finances_new_entry_category"
                 android:layout_marginTop="8dp"
@@ -237,7 +284,7 @@
                 android:id="@+id/finances_new_entry_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_calendar"
+                app:layout_constraintTop_toBottomOf="@id/finances_new_entry_table"
                 app:layout_constraintStart_toEndOf="@id/finances_new_entry_category_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="8dp"
