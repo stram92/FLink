@@ -25,6 +25,17 @@
             />
     </androidx.appcompat.widget.Toolbar>
 
+    <ImageView
+        android:id="@+id/finances_new_entry_delete"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/finances_new_entry_toolbar"
+        app:srcCompat="@drawable/ic_baseline_delete_24"
+        android:padding="16dp"
+        app:tint="@color/grey_text"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

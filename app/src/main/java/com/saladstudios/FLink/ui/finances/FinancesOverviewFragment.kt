@@ -136,26 +136,33 @@ class FinancesOverviewFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode== Activity.RESULT_OK){
             if (requestCode==LAUNCH_NEW_ENTRY) {
-                addJsonEntryLocal(requireContext(),
-                    data!!.getStringExtra("payer").toString(),
-                    data.getStringExtra("description").toString(),
-                    data.getStringExtra("sign").toString(),
-                    data.getStringExtra("amount").toString(),
-                    data.getStringExtra("entryDate").toString(),
-                    data.getStringExtra("payedFor").toString(),
-                    data.getStringExtra("payedForAmount").toString()
-                )
+                if (data!!.getStringExtra("payer")!=null) {
+                    addJsonEntryLocal(
+                        requireContext(),
+                        data!!.getStringExtra("payer").toString(),
+                        data.getStringExtra("description").toString(),
+                        data.getStringExtra("sign").toString(),
+                        data.getStringExtra("amount").toString(),
+                        data.getStringExtra("entryDate").toString(),
+                        data.getStringExtra("payedFor").toString(),
+                        data.getStringExtra("payedForAmount").toString()
+                    )
+                }
             } else if (requestCode==LAUNCH_EDIT_ENTRY) {
                 removeJsonEntryLocal(requireContext(),data!!.getIntExtra("id",-1))
-                addJsonEntryLocal(requireContext(),
-                    data!!.getStringExtra("payer").toString(),
-                    data.getStringExtra("description").toString(),
-                    data.getStringExtra("sign").toString(),
-                    data.getStringExtra("amount").toString(),
-                    data.getStringExtra("entryDate").toString(),
-                    data.getStringExtra("payedFor").toString(),
-                    data.getStringExtra("payedForAmount").toString()
-                )
+
+                if (data.getStringExtra("payer") != null) {
+                    addJsonEntryLocal(
+                        requireContext(),
+                        data.getStringExtra("payer").toString(),
+                        data.getStringExtra("description").toString(),
+                        data.getStringExtra("sign").toString(),
+                        data.getStringExtra("amount").toString(),
+                        data.getStringExtra("entryDate").toString(),
+                        data.getStringExtra("payedFor").toString(),
+                        data.getStringExtra("payedForAmount").toString()
+                    )
+                }
             }
         }
 

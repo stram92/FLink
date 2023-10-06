@@ -2,22 +2,22 @@ package com.saladstudios.FLink.ui.finances
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.KeyEvent
 import android.view.View
-import android.widget.CalendarView
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FinancesNewEntryBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumber
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 import kotlin.math.round
 
@@ -105,6 +105,7 @@ class FinancesNewEntry : AppCompatActivity() {
             updateDate()
         }
 
+        binding.financesNewEntryDelete.setOnClickListener { newEntryDelete() }
         binding.financesNewEntrySave.setOnClickListener { newEntrySave() }
         binding.financesNewEntrySwitchSascha.setOnClickListener { switchSascha() }
         binding.financesNewEntrySwitchDenise.setOnClickListener { switchDenise() }
@@ -141,6 +142,25 @@ class FinancesNewEntry : AppCompatActivity() {
         var myFormat = "dd.MM.yyyy"
         var dateFormat = SimpleDateFormat(myFormat, Locale.GERMANY)
         binding.financesNewEntryDate.text=dateFormat.format(financesEntryCalendar.time)
+    }
+
+    private fun newEntryDelete() {
+        if (id != -1) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.remove_entry)
+                .setMessage(R.string.delete_u_sure)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton(R.string.no,null)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    var returnIntent = Intent()
+                    returnIntent.putExtra("id", id)
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finish()
+                }
+                .show()
+        } else {
+            finish()
+        }
     }
 
     private fun newEntrySave() {
