@@ -34,4 +34,6 @@
     <string name="no">Nein</string>
     <string name="delete_u_sure">Möchtest du den Eintrag wirklich löschen?</string>
     <string name="remove_entry">Eintrag löschen</string>
+    <string name="cash_up">Kassensturz</string>
+    <string name="delete">Löschen</string>
 </resources>

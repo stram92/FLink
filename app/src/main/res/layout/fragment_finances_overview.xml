@@ -25,14 +25,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/finances_all_entries"
             android:textColor="@color/green_prime"
             android:gravity="center"
             android:layout_weight="4"
             android:autoSizeTextType="uniform"
-            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_marginTop="16dp"
             android:textAlignment="center"/>
 
@@ -42,11 +42,11 @@
             android:text="@string/finances_export"
             android:drawableLeft="@drawable/ic_baseline_download_for_offline_24"
             android:gravity="center"
-            android:textSize="8dp"
+            android:textSize="11sp"
             android:minHeight="0dp"
             android:minWidth="0dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/grey_prime"
             android:drawableTint="@color/white"
@@ -58,8 +58,8 @@
             android:src="@drawable/ic_baseline_filter_alt_24"
             android:background="@null"
             app:tint="@color/grey_text"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
             android:contentDescription="@string/filter_finances"/>
     </LinearLayout>
@@ -82,62 +82,56 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Kassensturz"
+                android:text="@string/cash_up"
                 android:textColor="@color/black"
                 android:backgroundTint="@color/grey_text"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="2dp"/>
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="2dp"/>
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/frame"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp">
-
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/text_finances_debtor"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/text_finances_debts"
-                            android:textColor="@color/grey_text"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            app:layout_constraintHorizontal_weight="2"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="4dp"
-                            android:layout_marginBottom="2dp"/>
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/text_finances_debtor"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/text_finances_debts"
+                        android:textColor="@color/grey_text"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        app:layout_constraintHorizontal_weight="2"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="2dp"/>
 
-                        <TextView
-                            android:id="@+id/text_finances_debts"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/text_finances_debtor"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:textColor="@color/red_minus"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            app:layout_constraintHorizontal_weight="3"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginBottom="2dp"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_finances_debts"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/text_finances_debtor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="@color/red_minus"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        app:layout_constraintHorizontal_weight="3"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginBottom="2dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </FrameLayout>
         </LinearLayout>
 
