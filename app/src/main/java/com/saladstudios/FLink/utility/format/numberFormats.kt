@@ -5,10 +5,10 @@ import java.util.*
 
 fun prettyPrintNumberWithCurrency (amount: String): String {
     return if (amount != null && amount != "") {
-        var formatter = DecimalFormat.getInstance(Locale.ROOT)
+        var formatter = DecimalFormat.getInstance(Locale.US)
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2
-        formatter.format(amount.toDouble()) + " €"
+        (formatter.format(amount.toDouble()) + " €").replace(","," ")
     } else {
         ""
     }
@@ -16,7 +16,7 @@ fun prettyPrintNumberWithCurrency (amount: String): String {
 
 fun prettyPrintNumber (amount: String): String {
     return if (amount != null && amount != "") {
-        var formatter = DecimalFormat.getInstance(Locale.ROOT)
+        var formatter = DecimalFormat.getInstance(Locale.US)
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 2
         formatter.format(amount.toDouble())
