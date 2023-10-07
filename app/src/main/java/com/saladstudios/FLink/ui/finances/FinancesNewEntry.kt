@@ -406,20 +406,11 @@ class FinancesNewEntry : AppCompatActivity() {
     }
 
     private fun switchSascha () {
-        if (binding.financesNewEntrySwitchSascha.isChecked) {
-            binding.financesNewEntrySwitchDenise.isChecked=false
-        } else if (!binding.financesNewEntrySwitchSascha.isChecked) {
-            binding.financesNewEntrySwitchDenise.isChecked=true
-        }
-
+        binding.financesNewEntrySwitchDenise.isChecked = !binding.financesNewEntrySwitchSascha.isChecked
     }
 
     private fun switchDenise () {
-        if (binding.financesNewEntrySwitchDenise.isChecked) {
-            binding.financesNewEntrySwitchSascha.isChecked=false
-        } else if (!binding.financesNewEntrySwitchDenise.isChecked) {
-            binding.financesNewEntrySwitchSascha.isChecked=true
-        }
+        binding.financesNewEntrySwitchSascha.isChecked = !binding.financesNewEntrySwitchDenise.isChecked
     }
 
     private fun initializeCategoryAdapter ():ArrayAdapter<String> {
