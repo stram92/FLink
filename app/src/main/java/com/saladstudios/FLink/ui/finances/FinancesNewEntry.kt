@@ -2,19 +2,24 @@ package com.saladstudios.FLink.ui.finances
 
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.format.DateFormat
+import android.text.method.DigitsKeyListener
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.addTextChangedListener
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FinancesNewEntryBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumber
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.round
@@ -111,18 +116,88 @@ class FinancesNewEntry : AppCompatActivity() {
 
         binding.financesNewEntryDelete.setOnClickListener { newEntryDelete() }
         binding.financesNewEntrySave.setOnClickListener { newEntrySave() }
+
         binding.financesNewEntrySwitchSascha.setOnClickListener { switchSascha() }
         binding.financesNewEntrySwitchDenise.setOnClickListener { switchDenise() }
+
         binding.financesNewEntryAmountInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountInput)}
-        binding.financesNewEntryAmountInput.setOnKeyListener{ _, _, event -> sharePrice(event)}
+        binding.financesNewEntryAmountInput.addTextChangedListener(object:TextWatcher {
+                lateinit var textBeforeUpdate: String
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    textBeforeUpdate = binding.financesNewEntryAmountInput.text.toString()
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if(s.toString().contains('.'))
+                        binding.financesNewEntryAmountInput.keyListener = DigitsKeyListener.getInstance("0123456789")
+                    else
+                        binding.financesNewEntryAmountInput.keyListener = DigitsKeyListener.getInstance("0123456789.,")
+
+                    if (s!=null && textBeforeUpdate != binding.financesNewEntryAmountInput.text.toString().replace(',','.')) {
+                        var position = binding.financesNewEntryAmountInput.selectionStart
+                        binding.financesNewEntryAmountInput.setText(s.toString().replace(',','.'))
+                        sharePrice()
+                        binding.financesNewEntryAmountInput.setSelection(position)
+                    }
+                }
+            })
+
         binding.financesNewEntryAmountDeniseInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountDeniseInput)}
-        binding.financesNewEntryAmountDeniseInput.setOnKeyListener{ amountInput: View, keyCode: Int, event: KeyEvent -> reDistributePriceDenise(
-            event
-        )}
+        binding.financesNewEntryAmountDeniseInput.addTextChangedListener(object:TextWatcher {
+            lateinit var textBeforeUpdate: String
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                textBeforeUpdate = binding.financesNewEntryAmountDeniseInput.text.toString()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString().contains('.'))
+                    binding.financesNewEntryAmountDeniseInput.keyListener = DigitsKeyListener.getInstance("0123456789")
+                else
+                    binding.financesNewEntryAmountDeniseInput.keyListener = DigitsKeyListener.getInstance("0123456789.,")
+
+                if (s!=null && textBeforeUpdate != binding.financesNewEntryAmountDeniseInput.text.toString().replace(',','.')) {
+                    var position = binding.financesNewEntryAmountDeniseInput.selectionStart
+                    binding.financesNewEntryAmountDeniseInput.setText(s.toString().replace(',','.'))
+                    reDistributePriceDenise()
+                    binding.financesNewEntryAmountDeniseInput.setSelection(position)
+                }
+            }
+        })
+
         binding.financesNewEntryAmountSaschaInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountSaschaInput)}
-        binding.financesNewEntryAmountSaschaInput.setOnKeyListener{ amountInput: View, keyCode: Int, event: KeyEvent -> reDistributePriceSascha(
-            event
-        )}
+        binding.financesNewEntryAmountSaschaInput.addTextChangedListener(object:TextWatcher {
+            lateinit var textBeforeUpdate: String
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                textBeforeUpdate = binding.financesNewEntryAmountSaschaInput.text.toString()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if(s.toString().contains('.'))
+                    binding.financesNewEntryAmountSaschaInput.keyListener = DigitsKeyListener.getInstance("0123456789")
+                else
+                    binding.financesNewEntryAmountSaschaInput.keyListener = DigitsKeyListener.getInstance("0123456789.,")
+
+                if (s!=null && textBeforeUpdate != binding.financesNewEntryAmountSaschaInput.text.toString().replace(',','.')) {
+                    var position = binding.financesNewEntryAmountSaschaInput.selectionStart
+                    binding.financesNewEntryAmountSaschaInput.setText(s.toString().replace(',','.'))
+                    reDistributePriceSascha()
+                    binding.financesNewEntryAmountSaschaInput.setSelection(position)
+                }
+            }
+        })
+
         binding.financesNewEntryForSascha.setOnClickListener { checkSascha() }
         binding.financesNewEntryForDenise.setOnClickListener { checkDenise() }
 
@@ -248,27 +323,22 @@ class FinancesNewEntry : AppCompatActivity() {
         }
     }
 
-    private fun sharePrice(event: KeyEvent): Boolean {
-
-        if (event.action == KeyEvent.ACTION_UP)
-        {
-            if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
-                if (binding.financesNewEntryForDenise.isChecked && binding.financesNewEntryForSascha.isChecked) {
-                    binding.financesNewEntryAmountDeniseInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()/2))
-                    binding.financesNewEntryAmountSaschaInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()-binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()))
-                } else if (!binding.financesNewEntryForDenise.isChecked && binding.financesNewEntryForSascha.isChecked) {
-                    binding.financesNewEntryAmountSaschaInput.setText(binding.financesNewEntryAmountInput.text)
-                    binding.financesNewEntryAmountDeniseInput.setText("0")
-                } else if (binding.financesNewEntryForDenise.isChecked && !binding.financesNewEntryForSascha.isChecked) {
-                    binding.financesNewEntryAmountDeniseInput.setText(binding.financesNewEntryAmountInput.text)
-                    binding.financesNewEntryAmountSaschaInput.setText("0")
-                }
-            } else {
+    private fun sharePrice() {
+        if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
+            if (binding.financesNewEntryForDenise.isChecked && binding.financesNewEntryForSascha.isChecked) {
+                binding.financesNewEntryAmountDeniseInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()/2))
+                binding.financesNewEntryAmountSaschaInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()-binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()))
+            } else if (!binding.financesNewEntryForDenise.isChecked && binding.financesNewEntryForSascha.isChecked) {
+                binding.financesNewEntryAmountSaschaInput.setText(binding.financesNewEntryAmountInput.text)
                 binding.financesNewEntryAmountDeniseInput.setText("0")
+            } else if (binding.financesNewEntryForDenise.isChecked && !binding.financesNewEntryForSascha.isChecked) {
+                binding.financesNewEntryAmountDeniseInput.setText(binding.financesNewEntryAmountInput.text)
                 binding.financesNewEntryAmountSaschaInput.setText("0")
             }
+        } else {
+            binding.financesNewEntryAmountDeniseInput.setText("0")
+            binding.financesNewEntryAmountSaschaInput.setText("0")
         }
-        return false
     }
 
     private fun prettyPrintAmout(AmountInput: EditText) {
@@ -277,32 +347,24 @@ class FinancesNewEntry : AppCompatActivity() {
         }
     }
 
-    private fun reDistributePriceSascha(event: KeyEvent): Boolean {
-        if (event.action == KeyEvent.ACTION_UP)
-        {
-            if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
-                if (!binding.financesNewEntryAmountSaschaInput.text.isEmpty()) {
-                    if (binding.financesNewEntryAmountSaschaInput.text.toString().toDouble() <= binding.financesNewEntryAmountInput.text.toString().toDouble()) {
-                        binding.financesNewEntryAmountDeniseInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()-binding.financesNewEntryAmountSaschaInput.text.toString().toDouble()))
-                    }
+    private fun reDistributePriceSascha() {
+        if (binding.financesNewEntryAmountInput.text.isNotEmpty()) {
+            if (binding.financesNewEntryAmountSaschaInput.text.isNotEmpty()) {
+                if (binding.financesNewEntryAmountSaschaInput.text.toString().toDouble() <= binding.financesNewEntryAmountInput.text.toString().toDouble()) {
+                    binding.financesNewEntryAmountDeniseInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()-binding.financesNewEntryAmountSaschaInput.text.toString().toDouble()))
                 }
             }
         }
-        return false
     }
 
-    private fun reDistributePriceDenise(event: KeyEvent): Boolean {
-        if (event.action == KeyEvent.ACTION_UP)
-        {
-            if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
-                if (!binding.financesNewEntryAmountDeniseInput.text.isEmpty()) {
-                    if (binding.financesNewEntryAmountDeniseInput.text.toString().toDouble() <= binding.financesNewEntryAmountInput.text.toString().toDouble()) {
-                        binding.financesNewEntryAmountSaschaInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()-binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()))
-                    }
+    private fun reDistributePriceDenise() {
+        if (binding.financesNewEntryAmountInput.text.isNotEmpty()) {
+            if (binding.financesNewEntryAmountDeniseInput.text.isNotEmpty()) {
+                if (binding.financesNewEntryAmountDeniseInput.text.toString().toDouble() <= binding.financesNewEntryAmountInput.text.toString().toDouble()) {
+                    binding.financesNewEntryAmountSaschaInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()-binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()))
                 }
             }
         }
-        return false
     }
 
     private fun checkSascha() {

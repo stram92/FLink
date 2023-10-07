@@ -96,7 +96,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/currency"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal"
+                    android:digits="0123456789.,"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -206,7 +207,8 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="@string/currency"
-                            android:inputType="numberDecimal"/>
+                            android:inputType="numberDecimal"
+                            android:digits="0123456789.,"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </TableRow>
                 <TableRow android:padding="4dp">
@@ -245,7 +247,8 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="@string/currency"
-                            android:inputType="numberDecimal"/>
+                            android:inputType="numberDecimal"
+                            android:digits="0123456789.,"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </TableRow>
             </TableLayout>
