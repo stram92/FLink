@@ -19,6 +19,7 @@ import androidx.core.widget.addTextChangedListener
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FinancesNewEntryBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumber
+import org.w3c.dom.Text
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,6 +29,8 @@ class FinancesNewEntry : AppCompatActivity() {
     private lateinit var binding: FinancesNewEntryBinding
     private var id: Int = -1
     private var financesEntryCalendar:Calendar = Calendar.getInstance()
+    private var ignoreTextChanges = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,82 +124,13 @@ class FinancesNewEntry : AppCompatActivity() {
         binding.financesNewEntrySwitchDenise.setOnClickListener { switchDenise() }
 
         binding.financesNewEntryAmountInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountInput)}
-        binding.financesNewEntryAmountInput.addTextChangedListener(object:TextWatcher {
-                lateinit var textBeforeUpdate: String
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    textBeforeUpdate = binding.financesNewEntryAmountInput.text.toString()
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    if(s.toString().contains('.'))
-                        binding.financesNewEntryAmountInput.keyListener = DigitsKeyListener.getInstance("0123456789")
-                    else
-                        binding.financesNewEntryAmountInput.keyListener = DigitsKeyListener.getInstance("0123456789.,")
-
-                    if (s!=null && textBeforeUpdate != binding.financesNewEntryAmountInput.text.toString().replace(',','.')) {
-                        var position = binding.financesNewEntryAmountInput.selectionStart
-                        binding.financesNewEntryAmountInput.setText(s.toString().replace(',','.'))
-                        sharePrice()
-                        binding.financesNewEntryAmountInput.setSelection(position)
-                    }
-                }
-            })
+        binding.financesNewEntryAmountInput.addTextChangedListener(generateTextWatcher(binding.financesNewEntryAmountInput))
 
         binding.financesNewEntryAmountDeniseInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountDeniseInput)}
-        binding.financesNewEntryAmountDeniseInput.addTextChangedListener(object:TextWatcher {
-            lateinit var textBeforeUpdate: String
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                textBeforeUpdate = binding.financesNewEntryAmountDeniseInput.text.toString()
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if(s.toString().contains('.'))
-                    binding.financesNewEntryAmountDeniseInput.keyListener = DigitsKeyListener.getInstance("0123456789")
-                else
-                    binding.financesNewEntryAmountDeniseInput.keyListener = DigitsKeyListener.getInstance("0123456789.,")
-
-                if (s!=null && textBeforeUpdate != binding.financesNewEntryAmountDeniseInput.text.toString().replace(',','.')) {
-                    var position = binding.financesNewEntryAmountDeniseInput.selectionStart
-                    binding.financesNewEntryAmountDeniseInput.setText(s.toString().replace(',','.'))
-                    reDistributePriceDenise()
-                    binding.financesNewEntryAmountDeniseInput.setSelection(position)
-                }
-            }
-        })
+        binding.financesNewEntryAmountDeniseInput.addTextChangedListener(generateTextWatcher(binding.financesNewEntryAmountDeniseInput))
 
         binding.financesNewEntryAmountSaschaInput.setOnFocusChangeListener{ _ , hasFocus -> if (!hasFocus) prettyPrintAmout(binding.financesNewEntryAmountSaschaInput)}
-        binding.financesNewEntryAmountSaschaInput.addTextChangedListener(object:TextWatcher {
-            lateinit var textBeforeUpdate: String
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                textBeforeUpdate = binding.financesNewEntryAmountSaschaInput.text.toString()
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                if(s.toString().contains('.'))
-                    binding.financesNewEntryAmountSaschaInput.keyListener = DigitsKeyListener.getInstance("0123456789")
-                else
-                    binding.financesNewEntryAmountSaschaInput.keyListener = DigitsKeyListener.getInstance("0123456789.,")
-
-                if (s!=null && textBeforeUpdate != binding.financesNewEntryAmountSaschaInput.text.toString().replace(',','.')) {
-                    var position = binding.financesNewEntryAmountSaschaInput.selectionStart
-                    binding.financesNewEntryAmountSaschaInput.setText(s.toString().replace(',','.'))
-                    reDistributePriceSascha()
-                    binding.financesNewEntryAmountSaschaInput.setSelection(position)
-                }
-            }
-        })
+        binding.financesNewEntryAmountSaschaInput.addTextChangedListener(generateTextWatcher(binding.financesNewEntryAmountSaschaInput))
 
         binding.financesNewEntryForSascha.setOnClickListener { checkSascha() }
         binding.financesNewEntryForDenise.setOnClickListener { checkDenise() }
@@ -215,6 +149,53 @@ class FinancesNewEntry : AppCompatActivity() {
                 financesEntryCalendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
+    }
+
+    private fun generateTextWatcher(text: EditText): TextWatcher {
+        var textWatcherObject: TextWatcher = object:TextWatcher{
+            lateinit var textBeforeUpdate: String
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                textBeforeUpdate = text.text.toString()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (!ignoreTextChanges) {
+                    ignoreTextChanges=true
+                    if (s.toString().contains('.')) {
+                        text.keyListener = DigitsKeyListener.getInstance("0123456789")
+                    } else {
+                        text.keyListener = DigitsKeyListener.getInstance("0123456789.,")
+                    }
+
+                    if (s != null && textBeforeUpdate != text.text.toString().replace(',', '.')) {
+                        var position = text.selectionStart
+
+                        if (text.text.toString() == binding.financesNewEntryAmountInput.text.toString() &&
+                            text.text.toString() != binding.financesNewEntryAmountSaschaInput.text.toString() &&
+                            text.text.toString() != binding.financesNewEntryAmountDeniseInput.text.toString()
+                        ) {
+                            text.setText(s.toString().replace(',', '.'))
+                            sharePrice()
+                        } else if (text.text.toString() == binding.financesNewEntryAmountSaschaInput.text.toString()) {
+                            text.setText(s.toString().replace(',', '.'))
+                            reDistributePriceSascha()
+                        } else if (text.text.toString() == binding.financesNewEntryAmountDeniseInput.text.toString()) {
+                            text.setText(s.toString().replace(',', '.'))
+                            reDistributePriceDenise()
+                        }
+
+                        text.setSelection(position)
+                    }
+                    ignoreTextChanges=false
+                }
+            }
+        }
+
+        return textWatcherObject
     }
 
     private fun updateDate() {
