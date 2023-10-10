@@ -419,6 +419,7 @@ class FinancesNewEntry : AppCompatActivity() {
         categories.add(getString(R.string.save_money))
         categories.add(getString(R.string.health))
         categories.add(getString(R.string.living))
+        categories.add(getString(R.string.other))
 
         return categories
     }
