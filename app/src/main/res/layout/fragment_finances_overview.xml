@@ -40,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/finances_export"
-            android:drawableLeft="@drawable/ic_baseline_download_for_offline_24"
             android:gravity="center"
             android:textSize="8sp"
             android:minHeight="0dp"
@@ -50,7 +49,9 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/grey_prime"
             android:drawableTint="@color/white"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_baseline_download_for_offline_24"
+            app:iconTint="@null"/>
 
         <ImageButton
             android:layout_width="wrap_content"
