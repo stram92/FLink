@@ -90,10 +90,10 @@ class FinancesNewEntry : AppCompatActivity() {
 
                 if(extras.getString("payedFor")=="S") {
                     binding.financesNewEntryAmountSaschaInput.setText(extras.getString("payedForAmount"))
-                    binding.financesNewEntryAmountDeniseInput.setText(prettyPrintNumber((extras.getString("amount")!!.toDouble() - extras.getString("payedForAmount")!!.toDouble()).toString()))
+                    binding.financesNewEntryAmountDeniseInput.setText((extras.getString("amount")!!.toDouble() - extras.getString("payedForAmount")!!.toDouble()).toString())
                 } else {
                     binding.financesNewEntryAmountDeniseInput.setText(extras.getString("payedForAmount"))
-                    binding.financesNewEntryAmountSaschaInput.setText(prettyPrintNumber((extras.getString("amount")!!.toDouble() - extras.getString("payedForAmount")!!.toDouble()).toString()))
+                    binding.financesNewEntryAmountSaschaInput.setText((extras.getString("amount")!!.toDouble() - extras.getString("payedForAmount")!!.toDouble()).toString())
                 }
             }
 
@@ -101,7 +101,7 @@ class FinancesNewEntry : AppCompatActivity() {
                 financesEntryCalendar.set(Calendar.YEAR,extras.getString("entryDate")!!.substring(6,10).toInt())
                 financesEntryCalendar.set(Calendar.MONTH,extras.getString("entryDate")!!.substring(3,5).toInt()-1)
                 financesEntryCalendar.set(Calendar.DAY_OF_MONTH,extras.getString("entryDate")!!.substring(0,2).toInt())
-                binding.financesNewEntryDate.setText(extras.getString("entryDate"))
+                binding.financesNewEntryDate.text = extras.getString("entryDate")
             }
 
             if (extras.getString("category")!="") {
@@ -111,7 +111,11 @@ class FinancesNewEntry : AppCompatActivity() {
             binding.financesNewEntryDeductionAddition.isChecked = extras.getString("sign")=="+"
 
             binding.financesNewEntryDescriptionInput.setText(extras.getString("description"))
-            binding.financesNewEntryAmountInput.setText(prettyPrintNumber(extras.getString("amount")!!))
+            binding.financesNewEntryAmountInput.setText(extras.getString("amount")!!)
+
+            prettyPrintAmout(binding.financesNewEntryAmountInput)
+            prettyPrintAmout(binding.financesNewEntryAmountDeniseInput)
+            prettyPrintAmout(binding.financesNewEntryAmountSaschaInput)
 
         } else {
             updateDate()
