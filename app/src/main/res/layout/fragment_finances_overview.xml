@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/finances_export"
-            android:drawableStart="@drawable/ic_baseline_download_for_offline_24"
+            android:drawableLeft="@drawable/ic_baseline_download_for_offline_24"
             android:gravity="center"
             android:textSize="8sp"
             android:minHeight="0dp"
