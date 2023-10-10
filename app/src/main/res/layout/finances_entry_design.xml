@@ -48,7 +48,7 @@
                         android:textColor="@color/grey_text"/>
                 </FrameLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/financesEntryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,6 +63,9 @@
                         android:id="@+id/financesEntryDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/financesEntryPayedForAmount"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:gravity="center"
@@ -71,35 +74,45 @@
                         android:id="@+id/financesEntryPayedForAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/financesEntryDescription"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:textSize="11sp"
                         android:gravity="center"
                         android:textColor="@color/green_plus"/>
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@id/financesEntryText"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:orientation="vertical"
                     android:layout_marginEnd="12dp">
                     <TextView
                         android:id="@+id/financesEntryAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/financesEntryEffectiveDate"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:gravity="end"
                         android:textColor="@color/grey_text"/>
                     <TextView
                         android:id="@+id/financesEntryEffectiveDate"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        app:layout_constraintTop_toBottomOf="@id/financesEntryAmount"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:gravity="end"
                         android:textColor="@color/grey_text"
                         android:textSize="11sp"
                         android:layout_gravity="end"/>
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
     </LinearLayout>
