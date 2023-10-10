@@ -413,6 +413,7 @@ class FinancesNewEntry : AppCompatActivity() {
         categories.add(getString(R.string.loan))
         categories.add(getString(R.string.insurance))
         categories.add(getString(R.string.spare_time))
+        categories.add(getString(R.string.handy))
         categories.add(getString(R.string.pets))
         categories.add(getString(R.string.eat))
         categories.add(getString(R.string.car))
