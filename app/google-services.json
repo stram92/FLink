@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "572780175035",
+    "project_id": "flink-3c91d",
+    "storage_bucket": "flink-3c91d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572780175035:android:100ad1edd076948ed3d39e",
+        "android_client_info": {
+          "package_name": "com.saladstudios.FLink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4AW-GCy90hETn5WfAaa0sI9njQjfl6Og"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
