@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "572780175035",
+    "firebase_url": "https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "flink-3c91d",
     "storage_bucket": "flink-3c91d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:572780175035:android:100ad1edd076948ed3d39e",
+        "mobilesdk_app_id": "1:572780175035:android:605df6f5d67705bbd3d39e",
         "android_client_info": {
           "package_name": "com.saladstudios.FLink"
         }

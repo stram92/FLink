@@ -1,6 +1,7 @@
 package com.saladstudios.FLink.utility.json
 
 import android.content.Context
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -14,6 +15,7 @@ fun readJsonFileLocal(context: Context): JSONArray? {
 
     if (file.exists()) {
         val jsonContent = file.readText(Charsets.UTF_8)
+
         val jsonArray = JSONArray(jsonContent)
 
         val jsonList = mutableListOf<JSONObject>()

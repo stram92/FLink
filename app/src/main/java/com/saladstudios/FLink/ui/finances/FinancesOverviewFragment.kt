@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FragmentFinancesOverviewBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumberWithCurrency
@@ -18,6 +24,7 @@ import com.saladstudios.FLink.utility.json.addJsonEntryLocal
 import com.saladstudios.FLink.utility.json.readJsonFileLocal
 import com.saladstudios.FLink.utility.json.removeJsonEntryLocal
 import com.saladstudios.FLink.utility.json.wipeJsonEntriesLocal
+import java.util.*
 
 class FinancesOverviewFragment : Fragment() {
     private lateinit var binding: FragmentFinancesOverviewBinding
@@ -46,6 +53,9 @@ class FinancesOverviewFragment : Fragment() {
         financesRecyclerView.layoutManager = LinearLayoutManager(view.context)
         financesRecyclerView.setHasFixedSize(true)
 
+        val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
+        val myRef = database.getReference("development")
+
 /*
         wipeJsonEntriesLocal(view.context)
 
@@ -57,7 +67,19 @@ class FinancesOverviewFragment : Fragment() {
         addJsonEntryLocal(view.context,"B","Kredit","-","2000.00","01.09.2023","","")
         addJsonEntryLocal(view.context,"S","Lachgummi","-","3.00","22.09.2023","","")
 */
+        val postListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val post = snapshot.value
 
+                Log.d("FLinkTest", post.toString())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("FLinkWarning", "loadPost: onCancelled", error.toException())
+            }
+        }
+
+        myRef.addValueEventListener(postListener)
 
         financesRecyclerView.adapter = refreshFinances (view.context)
 
@@ -134,6 +156,7 @@ class FinancesOverviewFragment : Fragment() {
         startActivityForResult(financesIntent,LAUNCH_EDIT_ENTRY)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode== Activity.RESULT_OK){
