@@ -6,7 +6,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.text.SimpleDateFormat
-import kotlin.math.sign
 
 private const val fileName = "financesdata.json"
 
@@ -73,4 +72,8 @@ fun wipeJsonEntriesLocal (context: Context) {
     if (file.exists()) {
         file.delete()
     }
+}
+
+fun buildJsonObject(id: String?, key: String?, value: Any?) {
+
 }

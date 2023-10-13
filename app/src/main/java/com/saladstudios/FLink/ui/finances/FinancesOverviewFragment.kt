@@ -20,10 +20,9 @@ import com.google.firebase.ktx.Firebase
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FragmentFinancesOverviewBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumberWithCurrency
-import com.saladstudios.FLink.utility.json.addJsonEntryLocal
-import com.saladstudios.FLink.utility.json.readJsonFileLocal
-import com.saladstudios.FLink.utility.json.removeJsonEntryLocal
-import com.saladstudios.FLink.utility.json.wipeJsonEntriesLocal
+import com.saladstudios.FLink.utility.json.*
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 
 class FinancesOverviewFragment : Fragment() {
@@ -32,6 +31,8 @@ class FinancesOverviewFragment : Fragment() {
 
     private var LAUNCH_NEW_ENTRY = 1
     private var LAUNCH_EDIT_ENTRY = 2
+
+    private var financeEntries: JSONArray = JSONArray()
 
     private lateinit var financesRecyclerView: RecyclerView
 
@@ -54,8 +55,7 @@ class FinancesOverviewFragment : Fragment() {
         financesRecyclerView.setHasFixedSize(true)
 
         val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
-        val myRef = database.getReference("development")
-
+        val myRef = database.getReference("development/finances/entries")
 /*
         wipeJsonEntriesLocal(view.context)
 
@@ -69,9 +69,17 @@ class FinancesOverviewFragment : Fragment() {
 */
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val post = snapshot.value
+                financeEntries = JSONArray()
+                for (financeEntry in snapshot.children) {
+                    val newEntry = JSONObject()
+                    newEntry.put("id", financeEntry.key.toString())
+                    for (values in financeEntry.children) {
+                        newEntry.put(values.key.toString(), values.value.toString())
+                    }
+                    financeEntries.put(newEntry)
+                }
 
-                Log.d("FLinkTest", post.toString())
+                financesRecyclerView.adapter=refreshFinances(view.context)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -89,12 +97,11 @@ class FinancesOverviewFragment : Fragment() {
 
     private fun refreshFinances (context: Context) : FinancesEntryAdapter{
         val financesData = ArrayList<FinancesItemsViewModel>()
-        val jsonArray = readJsonFileLocal(context)
         var payedAmount = 0.00
 
-        if (jsonArray != null) {
-            for (i in jsonArray.length()-1 downTo 0)  {
-                val jsonObject = jsonArray.getJSONObject(i)
+        if (financeEntries != null) {
+            for (i in financeEntries.length()-1 downTo 0)  {
+                val jsonObject = financeEntries.getJSONObject(i)
                 financesData.add(FinancesItemsViewModel(i,
                         jsonObject.getString("payer"),
                         jsonObject.getString("description"),
