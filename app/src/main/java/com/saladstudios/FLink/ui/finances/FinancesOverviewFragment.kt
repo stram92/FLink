@@ -32,6 +32,8 @@ class FinancesOverviewFragment : Fragment() {
     private var LAUNCH_NEW_ENTRY = 1
     private var LAUNCH_EDIT_ENTRY = 2
 
+    private val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
+    private val flatBase = database.getReference("development/finances/entries")
     private var financeEntries: JSONArray = JSONArray()
 
     private lateinit var financesRecyclerView: RecyclerView
@@ -54,8 +56,7 @@ class FinancesOverviewFragment : Fragment() {
         financesRecyclerView.layoutManager = LinearLayoutManager(view.context)
         financesRecyclerView.setHasFixedSize(true)
 
-        val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
-        val myRef = database.getReference("development/finances/entries")
+
 /*
         wipeJsonEntriesLocal(view.context)
 
@@ -87,7 +88,7 @@ class FinancesOverviewFragment : Fragment() {
             }
         }
 
-        myRef.addValueEventListener(postListener)
+        flatBase.addValueEventListener(postListener)
 
         financesRecyclerView.adapter = refreshFinances (view.context)
 
@@ -180,6 +181,15 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("payedForAmount").toString(),
                         data.getStringExtra("category").toString()
                     )
+
+                    flatBase.push().setValue(FinancesItemsViewModel(null,data!!.getStringExtra("payer").toString(),
+                        data.getStringExtra("description").toString(),
+                        data.getStringExtra("sign").toString(),
+                        data.getStringExtra("amount").toString(),
+                        data.getStringExtra("entryDate").toString(),
+                        data.getStringExtra("payedFor").toString(),
+                        data.getStringExtra("payedForAmount").toString(),
+                        data.getStringExtra("category").toString()))
                 }
             } else if (requestCode==LAUNCH_EDIT_ENTRY) {
                 removeJsonEntryLocal(requireContext(),data!!.getIntExtra("id",-1))
