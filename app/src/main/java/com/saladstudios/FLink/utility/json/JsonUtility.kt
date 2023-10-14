@@ -15,6 +15,9 @@ fun readJsonFileLocal(context: Context): JSONArray? {
     if (file.exists()) {
         val jsonContent = file.readText(Charsets.UTF_8)
 
+        Log.d("FLinkTest",jsonContent)
+
+
         val jsonArray = JSONArray(jsonContent)
 
         val jsonList = mutableListOf<JSONObject>()
@@ -53,15 +56,15 @@ fun addJsonEntryLocal(context: Context,
     file.writeText(jsonArray.toString(),Charsets.UTF_8)
 }
 
-fun removeJsonEntryLocal (context: Context, indexToRemove: Int) {
+fun removeJsonEntryLocal (context: Context, indexToRemove: String?) {
     val file = File(context.filesDir, fileName)
 
     if (file.exists()) {
         val jsonArray = readJsonFileLocal(context)
 
-        if (indexToRemove >= 0 && indexToRemove < jsonArray!!.length()) {
+        /*if (indexToRemove >= 0 && indexToRemove < jsonArray!!.length()) {
             jsonArray.remove(indexToRemove)
-        }
+        }*/
 
         file.writeText(jsonArray.toString(),Charsets.UTF_8)
     }
@@ -74,6 +77,16 @@ fun wipeJsonEntriesLocal (context: Context) {
     }
 }
 
-fun buildJsonObject(id: String?, key: String?, value: Any?) {
+fun sortJsonObject(input: JSONArray): JSONArray {
+    val jsonList = mutableListOf<JSONObject>()
 
+    for (i in 0 until input.length()) {
+        jsonList.add(input.getJSONObject(i))
+    }
+
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy")
+
+    jsonList.sortBy { dateFormat.parse(it.getString("entryDate")) }
+
+    return JSONArray(jsonList)
 }

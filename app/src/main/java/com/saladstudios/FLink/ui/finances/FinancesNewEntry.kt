@@ -27,7 +27,7 @@ import kotlin.math.round
 
 class FinancesNewEntry : AppCompatActivity() {
     private lateinit var binding: FinancesNewEntryBinding
-    private var id: Int = -1
+    private var id: String = ""
     private var financesEntryCalendar:Calendar = Calendar.getInstance()
     private var ignoreTextChanges = false
 
@@ -49,7 +49,7 @@ class FinancesNewEntry : AppCompatActivity() {
         if (extras != null) {
             binding.financesNewEntryToolbarText.text = getString(R.string.modfiyFinanceEntry)
 
-            id = extras.getInt("id")
+            id = extras.getString("id").toString()
 
             if (extras.getString("payer") == "S") {
                 binding.financesNewEntrySwitchSascha.isChecked=true
@@ -209,7 +209,7 @@ class FinancesNewEntry : AppCompatActivity() {
     }
 
     private fun newEntryDelete() {
-        if (id != -1) {
+        if (id != "") {
             AlertDialog.Builder(this)
                 .setTitle(R.string.remove_entry)
                 .setMessage(R.string.delete_u_sure)
@@ -289,7 +289,7 @@ class FinancesNewEntry : AppCompatActivity() {
                 category = ""
             }
 
-            if (id != -1) {
+            if (id != "") {
                 returnIntent.putExtra("id",id)
             }
 

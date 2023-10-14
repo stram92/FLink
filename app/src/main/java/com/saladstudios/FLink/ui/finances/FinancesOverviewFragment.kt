@@ -33,7 +33,7 @@ class FinancesOverviewFragment : Fragment() {
     private var LAUNCH_EDIT_ENTRY = 2
 
     private val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
-    private val flatBase = database.getReference("development/finances/entries")
+    private val flatBase = database.getReference("FLink/finances/entries")
     private var financeEntries: JSONArray = JSONArray()
 
     private lateinit var financesRecyclerView: RecyclerView
@@ -55,7 +55,6 @@ class FinancesOverviewFragment : Fragment() {
 
         financesRecyclerView.layoutManager = LinearLayoutManager(view.context)
         financesRecyclerView.setHasFixedSize(true)
-
 
 /*
         wipeJsonEntriesLocal(view.context)
@@ -79,7 +78,7 @@ class FinancesOverviewFragment : Fragment() {
                     }
                     financeEntries.put(newEntry)
                 }
-
+                financeEntries = sortJsonObject(financeEntries)
                 financesRecyclerView.adapter=refreshFinances(view.context)
             }
 
@@ -103,7 +102,7 @@ class FinancesOverviewFragment : Fragment() {
         if (financeEntries != null) {
             for (i in financeEntries.length()-1 downTo 0)  {
                 val jsonObject = financeEntries.getJSONObject(i)
-                financesData.add(FinancesItemsViewModel(i,
+                financesData.add(FinancesItemsViewModel(jsonObject.getString("id"),
                         jsonObject.getString("payer"),
                         jsonObject.getString("description"),
                         jsonObject.getString("sign"),
@@ -170,7 +169,7 @@ class FinancesOverviewFragment : Fragment() {
         if (resultCode== Activity.RESULT_OK){
             if (requestCode==LAUNCH_NEW_ENTRY) {
                 if (data!!.getStringExtra("payer")!=null) {
-                    addJsonEntryLocal(
+                    /*addJsonEntryLocal(
                         requireContext(),
                         data!!.getStringExtra("payer").toString(),
                         data.getStringExtra("description").toString(),
@@ -180,7 +179,7 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("payedFor").toString(),
                         data.getStringExtra("payedForAmount").toString(),
                         data.getStringExtra("category").toString()
-                    )
+                    )*/
 
                     flatBase.push().setValue(FinancesItemsViewModel(null,data!!.getStringExtra("payer").toString(),
                         data.getStringExtra("description").toString(),
@@ -192,10 +191,11 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("category").toString()))
                 }
             } else if (requestCode==LAUNCH_EDIT_ENTRY) {
-                removeJsonEntryLocal(requireContext(),data!!.getIntExtra("id",-1))
+                //removeJsonEntryLocal(requireContext(),data!!.getStringExtra("id"))
+                data!!.getStringExtra("id")?.let { flatBase.child(it).removeValue() }
 
                 if (data.getStringExtra("payer") != null) {
-                    addJsonEntryLocal(
+                    /*addJsonEntryLocal(
                         requireContext(),
                         data.getStringExtra("payer").toString(),
                         data.getStringExtra("description").toString(),
@@ -205,7 +205,15 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("payedFor").toString(),
                         data.getStringExtra("payedForAmount").toString(),
                         data.getStringExtra("category").toString()
-                    )
+                    )*/
+                    flatBase.push().setValue(FinancesItemsViewModel(null,data!!.getStringExtra("payer").toString(),
+                        data.getStringExtra("description").toString(),
+                        data.getStringExtra("sign").toString(),
+                        data.getStringExtra("amount").toString(),
+                        data.getStringExtra("entryDate").toString(),
+                        data.getStringExtra("payedFor").toString(),
+                        data.getStringExtra("payedForAmount").toString(),
+                        data.getStringExtra("category").toString()))
                 }
             }
         }
