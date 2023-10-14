@@ -187,8 +187,7 @@
                         android:layout_gravity="center"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        android:checked="true"/>
+                        android:layout_weight="0.1"/>
 
                     <CheckBox
                         android:id="@+id/finances_new_entry_for_denise"
@@ -227,7 +226,8 @@
                         android:id="@+id/finances_new_entry_switch_sascha"
                         android:layout_gravity="center"
                         android:layout_width="0dp"
-                        android:layout_weight="0.1"/>
+                        android:layout_weight="0.1"
+                        android:checked="true"/>
 
                     <CheckBox
                         android:id="@+id/finances_new_entry_for_sascha"
