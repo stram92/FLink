@@ -57,17 +57,6 @@ class FinancesOverviewFragment : Fragment() {
         financesRecyclerView.layoutManager = LinearLayoutManager(view.context)
         financesRecyclerView.setHasFixedSize(true)
 
-/*
-        wipeJsonEntriesLocal(view.context)
-
-
-        addJsonEntryLocal(view.context,"S","Kino","-","15.00","01.12.2023","D","7.50")
-        addJsonEntryLocal(view.context,"D","Einkaufen","-","142.12","01.08.2023","S","71.06")
-        addJsonEntryLocal(view.context,"D","Pfeile","-","300.00","01.09.2023","","")
-        addJsonEntryLocal(view.context,"D","Gehalt","+","3000.00","02.09.2023","D","3000.00")
-        addJsonEntryLocal(view.context,"B","Kredit","-","2000.00","01.09.2023","","")
-        addJsonEntryLocal(view.context,"S","Lachgummi","-","3.00","22.09.2023","","")
-*/
         val postListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 financeEntries = JSONArray()
@@ -100,32 +89,30 @@ class FinancesOverviewFragment : Fragment() {
         val financesData = ArrayList<FinancesItemsViewModel>()
         var payedAmount = 0.00
 
-        if (financeEntries != null) {
-            for (i in financeEntries.length()-1 downTo 0)  {
-                val jsonObject = financeEntries.getJSONObject(i)
-                financesData.add(FinancesItemsViewModel(jsonObject.getString("id"),
-                        jsonObject.getString("payer"),
-                        jsonObject.getString("description"),
-                        jsonObject.getString("sign"),
-                        jsonObject.getString("amount"),
-                        jsonObject.getString("entryDate"),
-                        jsonObject.getString("payedFor"),
-                        jsonObject.getString("payedForAmount"),
-                        jsonObject.optString("category",getString(R.string.not_available))))
+        for (i in financeEntries.length()-1 downTo 0)  {
+            val jsonObject = financeEntries.getJSONObject(i)
+            financesData.add(FinancesItemsViewModel(jsonObject.getString("id"),
+                    jsonObject.getString("payer"),
+                    jsonObject.getString("description"),
+                    jsonObject.getString("sign"),
+                    jsonObject.getString("amount"),
+                    jsonObject.getString("entryDate"),
+                    jsonObject.getString("payedFor"),
+                    jsonObject.getString("payedForAmount"),
+                    jsonObject.optString("category",getString(R.string.not_available))))
 
-                if (jsonObject.getString("payedFor")!="") {
-                    if (jsonObject.getString("payedFor")=="S") {
-                        if (jsonObject.getString("sign")=="-") {
-                            payedAmount += jsonObject.getString("payedForAmount").toDouble()
-                        } else {
-                            payedAmount -= jsonObject.getString("payedForAmount").toDouble()
-                        }
-                    } else if (jsonObject.getString("payedFor")=="D"){
-                        if (jsonObject.getString("sign")=="-") {
-                            payedAmount -= jsonObject.getString("payedForAmount").toDouble()
-                        } else {
-                            payedAmount += jsonObject.getString("payedForAmount").toDouble()
-                        }
+            if (jsonObject.getString("payedFor")!="") {
+                if (jsonObject.getString("payedFor")=="S") {
+                    if (jsonObject.getString("sign")=="-") {
+                        payedAmount += jsonObject.getString("payedForAmount").toDouble()
+                    } else {
+                        payedAmount -= jsonObject.getString("payedForAmount").toDouble()
+                    }
+                } else if (jsonObject.getString("payedFor")=="D"){
+                    if (jsonObject.getString("sign")=="-") {
+                        payedAmount -= jsonObject.getString("payedForAmount").toDouble()
+                    } else {
+                        payedAmount += jsonObject.getString("payedForAmount").toDouble()
                     }
                 }
             }
