@@ -8,19 +8,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.text.method.DigitsKeyListener
-import android.util.Log
-import android.view.KeyEvent
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.widget.addTextChangedListener
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FinancesNewEntryBinding
-import com.saladstudios.FLink.utility.format.prettyPrintNumber
-import org.w3c.dom.Text
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.round
@@ -45,7 +38,7 @@ class FinancesNewEntry : AppCompatActivity() {
 
         binding.financesNewEntryCategory.adapter = initializeCategoryAdapter()
 
-        var extras: Bundle? = intent.extras
+        val extras: Bundle? = intent.extras
         if (extras != null) {
             binding.financesNewEntryToolbarText.text = getString(R.string.modfiyFinanceEntry)
 
@@ -139,7 +132,7 @@ class FinancesNewEntry : AppCompatActivity() {
         binding.financesNewEntryForSascha.setOnClickListener { checkSascha() }
         binding.financesNewEntryForDenise.setOnClickListener { checkDenise() }
 
-        val dateSetListener = DatePickerDialog.OnDateSetListener{view: DatePicker,year: Int, month: Int, day: Int ->
+        val dateSetListener = DatePickerDialog.OnDateSetListener{ _, year: Int, month: Int, day: Int ->
             financesEntryCalendar.set(Calendar.YEAR,year)
             financesEntryCalendar.set(Calendar.MONTH,month)
             financesEntryCalendar.set(Calendar.DAY_OF_MONTH,day)
@@ -156,7 +149,7 @@ class FinancesNewEntry : AppCompatActivity() {
     }
 
     private fun generateTextWatcher(text: EditText): TextWatcher {
-        var textWatcherObject: TextWatcher = object:TextWatcher{
+        val textWatcherObject: TextWatcher = object:TextWatcher{
             lateinit var textBeforeUpdate: String
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -176,7 +169,7 @@ class FinancesNewEntry : AppCompatActivity() {
                     }
 
                     if (s != null && textBeforeUpdate != text.text.toString().replace(',', '.')) {
-                        var position = text.selectionStart
+                        val position = text.selectionStart
 
                         if (text.text.toString() == binding.financesNewEntryAmountInput.text.toString() &&
                             text.text.toString() != binding.financesNewEntryAmountSaschaInput.text.toString() &&
@@ -203,8 +196,8 @@ class FinancesNewEntry : AppCompatActivity() {
     }
 
     private fun updateDate() {
-        var myFormat = "dd.MM.yyyy"
-        var dateFormat = SimpleDateFormat(myFormat, Locale.GERMANY)
+        val myFormat = "dd.MM.yyyy"
+        val dateFormat = SimpleDateFormat(myFormat, Locale.GERMANY)
         binding.financesNewEntryDate.text=dateFormat.format(financesEntryCalendar.time)
     }
 
@@ -216,7 +209,7 @@ class FinancesNewEntry : AppCompatActivity() {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setNegativeButton(R.string.no,null)
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    var returnIntent = Intent()
+                    val returnIntent = Intent()
                     returnIntent.putExtra("id", id)
                     setResult(Activity.RESULT_OK, returnIntent)
                     finish()
@@ -243,12 +236,12 @@ class FinancesNewEntry : AppCompatActivity() {
             val toast = Toast.makeText(this, "Wertverteilung zu Hoch!: "+ (binding.financesNewEntryAmountSaschaInput.text.toString().toDouble()+binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()).toString() +"="+binding.financesNewEntryAmountInput.text.toString(), Toast.LENGTH_SHORT)
             toast.show()
         } else {
-            var returnIntent = Intent()
-            var payer: String
-            var payedforamount: String
-            var date = financesEntryCalendar.time
-            var sign: String
-            var amount = binding.financesNewEntryAmountInput.text.toString()
+            val returnIntent = Intent()
+            val payer: String
+            val payedforamount: String
+            val date = financesEntryCalendar.time
+            val sign: String
+            val amount = binding.financesNewEntryAmountInput.text.toString()
             var category = binding.financesNewEntryCategory.selectedItem.toString()
 
             if (binding.financesNewEntrySwitchSascha.isChecked) {
@@ -259,7 +252,7 @@ class FinancesNewEntry : AppCompatActivity() {
                 payer = "B"
             }
 
-            var payedfor: String = if (payer == "D" && binding.financesNewEntryForSascha.isChecked) {
+            val payedfor: String = if (payer == "D" && binding.financesNewEntryForSascha.isChecked) {
                 "S"
             } else if (payer == "S" && binding.financesNewEntryForDenise.isChecked) {
                 "D"
@@ -281,7 +274,7 @@ class FinancesNewEntry : AppCompatActivity() {
                 sign = "-"
             }
 
-            var entryDate: String =
+            val entryDate: String =
                 DateFormat.format("dd", date).toString() + "." + DateFormat.format("MM", date)
                 .toString() + "." + DateFormat.format("yyyy", date).toString()
 
@@ -309,15 +302,15 @@ class FinancesNewEntry : AppCompatActivity() {
     }
 
     private fun sharePrice() {
-        if (!binding.financesNewEntryAmountInput.text.isEmpty()) {
+        if (binding.financesNewEntryAmountInput.text.isNotEmpty()) {
             if (binding.financesNewEntryForDenise.isChecked && binding.financesNewEntryForSascha.isChecked) {
                 binding.financesNewEntryAmountDeniseInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()/2))
                 binding.financesNewEntryAmountSaschaInput.setText(String.format(Locale.US,"%.2f",binding.financesNewEntryAmountInput.text.toString().toDouble()-binding.financesNewEntryAmountDeniseInput.text.toString().toDouble()))
             } else if (!binding.financesNewEntryForDenise.isChecked && binding.financesNewEntryForSascha.isChecked) {
-                binding.financesNewEntryAmountSaschaInput.setText(binding.financesNewEntryAmountInput.text)
+                binding.financesNewEntryAmountSaschaInput.text = binding.financesNewEntryAmountInput.text
                 binding.financesNewEntryAmountDeniseInput.setText("0")
             } else if (binding.financesNewEntryForDenise.isChecked && !binding.financesNewEntryForSascha.isChecked) {
-                binding.financesNewEntryAmountDeniseInput.setText(binding.financesNewEntryAmountInput.text)
+                binding.financesNewEntryAmountDeniseInput.text = binding.financesNewEntryAmountInput.text
                 binding.financesNewEntryAmountSaschaInput.setText("0")
             }
         } else {
@@ -399,9 +392,9 @@ class FinancesNewEntry : AppCompatActivity() {
     }
 
     private fun initializeCategoryAdapter ():ArrayAdapter<String> {
-        var spinnerArray = buildCategories()
+        val spinnerArray = buildCategories()
 
-        var adapter: ArrayAdapter<String> = ArrayAdapter(this, R.layout.finances_new_entry_category_spinner,spinnerArray)
+        val adapter: ArrayAdapter<String> = ArrayAdapter(this, R.layout.finances_new_entry_category_spinner,spinnerArray)
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
@@ -409,7 +402,7 @@ class FinancesNewEntry : AppCompatActivity() {
     }
 
     private fun buildCategories ():ArrayList<String> {
-        var categories: ArrayList<String> = ArrayList()
+        val categories: ArrayList<String> = ArrayList()
         categories.add(getString(R.string.not_available))
         categories.add(getString(R.string.groceries))
         categories.add(getString(R.string.shopping))
