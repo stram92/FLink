@@ -157,18 +157,6 @@ class FinancesOverviewFragment : Fragment() {
         if (resultCode== Activity.RESULT_OK){
             if (requestCode==LAUNCH_NEW_ENTRY) {
                 if (data!!.getStringExtra("payer")!=null) {
-                    /*addJsonEntryLocal(
-                        requireContext(),
-                        data!!.getStringExtra("payer").toString(),
-                        data.getStringExtra("description").toString(),
-                        data.getStringExtra("sign").toString(),
-                        data.getStringExtra("amount").toString(),
-                        data.getStringExtra("entryDate").toString(),
-                        data.getStringExtra("payedFor").toString(),
-                        data.getStringExtra("payedForAmount").toString(),
-                        data.getStringExtra("category").toString()
-                    )*/
-
                     flatBase.push().setValue(FinancesItemsViewModel(null,
                         data!!.getStringExtra("payer").toString(),
                         data.getStringExtra("description").toString(),
@@ -180,21 +168,9 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("category").toString()))
                 }
             } else if (requestCode==LAUNCH_EDIT_ENTRY) {
-                //removeJsonEntryLocal(requireContext(),data!!.getStringExtra("id"))
                 data!!.getStringExtra("id")?.let { flatBase.child(it).removeValue() }
 
                 if (data.getStringExtra("payer") != null) {
-                    /*addJsonEntryLocal(
-                        requireContext(),
-                        data.getStringExtra("payer").toString(),
-                        data.getStringExtra("description").toString(),
-                        data.getStringExtra("sign").toString(),
-                        data.getStringExtra("amount").toString(),
-                        data.getStringExtra("entryDate").toString(),
-                        data.getStringExtra("payedFor").toString(),
-                        data.getStringExtra("payedForAmount").toString(),
-                        data.getStringExtra("category").toString()
-                    )*/
                     flatBase.push().setValue(FinancesItemsViewModel(null,data!!.getStringExtra("payer").toString(),
                         data.getStringExtra("description").toString(),
                         data.getStringExtra("sign").toString(),
