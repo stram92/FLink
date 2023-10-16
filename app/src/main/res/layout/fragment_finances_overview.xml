@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
-                android:id="@+id/button_finances_equalize"
+                android:id="@+id/button_finances_cash_up"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
