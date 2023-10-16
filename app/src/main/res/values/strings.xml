@@ -33,6 +33,7 @@
     <string name="modfiyFinanceEntry">Finanzeintrag</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
+    <string name="ok">Ok</string>
     <string name="delete_u_sure">Möchtest du den Eintrag wirklich löschen?</string>
     <string name="remove_entry">Eintrag löschen</string>
     <string name="cash_up">Kassensturz</string>
@@ -52,4 +53,8 @@
     <string name="living">Wohnung/Garten</string>
     <string name="other">Sonstiges</string>
     <string name="handy">Handy</string>
+    <string name="cash_up_alert_title">Kassensturz durchführen?</string>
+    <string name="cash_up_alert_message">Dadurch werden alle aktuellen Finanzeinträge zurückgesetzt und eine neue Abrechnung gestartet.</string>
+    <string name="cash_up_notification_title">Kassensturz erfolgreich!</string>
+    <string name="cash_up_notification_done">Der Kassensturz wurde erfolgreich durchgeführt.</string>
 </resources>

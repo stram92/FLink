@@ -1,6 +1,7 @@
 package com.saladstudios.FLink.ui.finances
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.saladstudios.FLink.utility.json.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.EmptyMap.entries
 
 class FinancesOverviewFragment : Fragment() {
     private lateinit var binding: FragmentFinancesOverviewBinding
@@ -32,9 +34,11 @@ class FinancesOverviewFragment : Fragment() {
     private var LAUNCH_NEW_ENTRY = 1
     private var LAUNCH_EDIT_ENTRY = 2
 
+    private val family = "development"
+    private val module = "finances"
+
     private val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
-    //private val flatBase = database.getReference("FLink/finances/entries")
-    private val flatBase = database.getReference("development/finances/entries")
+    private val flatBase = database.getReference("$family/$module/entries")
     private var financeEntries: JSONArray = JSONArray()
 
     private lateinit var financesRecyclerView: RecyclerView
@@ -82,6 +86,7 @@ class FinancesOverviewFragment : Fragment() {
         financesRecyclerView.adapter = refreshFinances (view.context)
 
         binding.buttonFinancesAdd.setOnClickListener { financesAdd(view.context) }
+        binding.buttonFinancesCashUp.setOnClickListener { financesCashUp(view.context) }
 
     }
 
@@ -183,5 +188,28 @@ class FinancesOverviewFragment : Fragment() {
         }
 
         financesRecyclerView.adapter = refreshFinances(binding.root.context)
+    }
+
+    private fun financesCashUp (context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle(R.string.cash_up_alert_title)
+            .setMessage(R.string.cash_up_alert_message)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setNegativeButton(R.string.no,null)
+            .setPositiveButton(R.string.yes) { _, _ ->
+                financesDoCashUp(context)
+            }
+            .show()
+    }
+
+    private fun financesDoCashUp(context: Context) {
+        var financesHistoryStorage = storage.reference
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.cash_up_notification_title)
+            .setMessage(R.string.cash_up_notification_done)
+            .setIcon(android.R.drawable.checkbox_on_background)
+            .setPositiveButton(R.string.ok,null)
+            .show()
     }
 }
