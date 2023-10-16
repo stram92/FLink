@@ -33,7 +33,8 @@ class FinancesOverviewFragment : Fragment() {
     private var LAUNCH_EDIT_ENTRY = 2
 
     private val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
-    private val flatBase = database.getReference("FLink/finances/entries")
+    //private val flatBase = database.getReference("FLink/finances/entries")
+    private val flatBase = database.getReference("development/finances/entries")
     private var financeEntries: JSONArray = JSONArray()
 
     private lateinit var financesRecyclerView: RecyclerView
@@ -181,7 +182,8 @@ class FinancesOverviewFragment : Fragment() {
                         data.getStringExtra("category").toString()
                     )*/
 
-                    flatBase.push().setValue(FinancesItemsViewModel(null,data!!.getStringExtra("payer").toString(),
+                    flatBase.push().setValue(FinancesItemsViewModel(null,
+                        data!!.getStringExtra("payer").toString(),
                         data.getStringExtra("description").toString(),
                         data.getStringExtra("sign").toString(),
                         data.getStringExtra("amount").toString(),
