@@ -18,14 +18,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FragmentFinancesOverviewBinding
 import com.saladstudios.FLink.utility.format.prettyPrintNumberWithCurrency
 import com.saladstudios.FLink.utility.json.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 import java.util.*
-import kotlin.collections.EmptyMap.entries
 
 class FinancesOverviewFragment : Fragment() {
     private lateinit var binding: FragmentFinancesOverviewBinding
@@ -35,9 +36,12 @@ class FinancesOverviewFragment : Fragment() {
     private var LAUNCH_EDIT_ENTRY = 2
 
     private val family = "development"
+    //private val family = "FLink"
     private val module = "finances"
 
     private val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
+    private val storage = Firebase.storage("gs://flink-3c91d.appspot.com/")
+
     private val flatBase = database.getReference("$family/$module/entries")
     private var financeEntries: JSONArray = JSONArray()
 
@@ -204,6 +208,10 @@ class FinancesOverviewFragment : Fragment() {
 
     private fun financesDoCashUp(context: Context) {
         var financesHistoryStorage = storage.reference
+
+        val cashUpFinanceData = financesHistoryStorage.child("$family/$module/entries/financeData.json")
+
+        cashUpFinanceData.putBytes("Testfile".toByteArray())
 
         AlertDialog.Builder(context)
             .setTitle(R.string.cash_up_notification_title)
