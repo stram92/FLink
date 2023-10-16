@@ -275,10 +275,10 @@ class FinancesNewEntry : AppCompatActivity() {
                 payedforamount=""
             }
 
-            if (binding.financesNewEntryDeductionAddition.isEnabled) {
-                sign = "-"
-            } else {
+            if (binding.financesNewEntryDeductionAddition.isChecked) {
                 sign = "+"
+            } else {
+                sign = "-"
             }
 
             var entryDate: String =
