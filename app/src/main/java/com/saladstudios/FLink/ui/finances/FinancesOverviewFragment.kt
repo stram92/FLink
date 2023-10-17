@@ -5,12 +5,14 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.style.TabStopSpan.Standard
 import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView.OnScrollListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -48,6 +50,14 @@ class FinancesOverviewFragment : Fragment() {
     private val flatBase = database.getReference("$family/$module/entries")
     private var financeEntries: JSONArray = JSONArray()
 
+    private var financesHistoryStorage = storage.reference
+
+    private var loadedArchive = ""
+    private var loadedArchiveNumber = 0
+    private var downloadFinished = true
+    private var files = mutableListOf<String>()
+    private val archiveFileBase = financesHistoryStorage.child("$family/$module/entries/")
+
     private lateinit var financesRecyclerView: RecyclerView
 
     @Override
@@ -65,7 +75,8 @@ class FinancesOverviewFragment : Fragment() {
 
         financesRecyclerView = view.findViewById(R.id.financesRecyclerView)
 
-        financesRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        val linearLayoutManager = LinearLayoutManager(view.context)
+        financesRecyclerView.layoutManager = linearLayoutManager
         financesRecyclerView.setHasFixedSize(true)
 
         val postListener = object : ValueEventListener {
@@ -92,6 +103,63 @@ class FinancesOverviewFragment : Fragment() {
 
         financesRecyclerView.adapter = refreshFinances (view.context)
 
+        financesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (downloadFinished) {
+                    if (linearLayoutManager.findLastVisibleItemPosition() == financeEntries.length()-1) {
+
+                        downloadFinished = false
+
+                        if (loadedArchive == "") {
+                            archiveFileBase.listAll().addOnSuccessListener { it ->
+                                for (item in it.items) {
+                                    Log.d("FLinkTest", item.toString().substringAfter("entries/"))
+                                    files.add(item.toString().substringAfter("entries/"))
+                                }
+
+                                files.sortDescending()
+                                Log.d("FLinkTest", files.size.toString())
+                                loadedArchive=files[loadedArchiveNumber]
+
+                                val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
+
+                                downloadArchive.getBytes(1024*1024).addOnSuccessListener { it1 ->
+                                    val jsonString = String(it1,StandardCharsets.UTF_8)
+                                    val jsonArray = getJsonArray(jsonString)
+
+                                    financeEntries=jsonArray?.let { it2 -> mergeJsonArrays(financeEntries, it2) }!!
+
+                                    financesRecyclerView.adapter=refreshFinances(view.context)
+
+                                    downloadFinished = true
+                                }
+                            }
+                        } else {
+                            if (loadedArchiveNumber+1 < files.size) {
+                                loadedArchiveNumber++
+                                loadedArchive=files[loadedArchiveNumber]
+
+                                val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
+
+                                downloadArchive.getBytes(1024*1024).addOnSuccessListener {
+                                    val jsonString = String(it,StandardCharsets.UTF_8)
+                                    val jsonArray = getJsonArray(jsonString)
+
+                                    financeEntries=jsonArray?.let { it1 -> mergeJsonArrays(financeEntries, it1) }!!
+
+                                    financesRecyclerView.adapter=refreshFinances(view.context)
+
+                                    downloadFinished = true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
         binding.buttonFinancesAdd.setOnClickListener { financesAdd(view.context) }
         binding.buttonFinancesCashUp.setOnClickListener { financesCashUp(view.context) }
 
@@ -103,6 +171,8 @@ class FinancesOverviewFragment : Fragment() {
 
         for (i in financeEntries.length()-1 downTo 0)  {
             val jsonObject = financeEntries.getJSONObject(i)
+
+            Log.d("FLinkTest", jsonObject.getString("id"))
             financesData.add(FinancesItemsViewModel(jsonObject.getString("id"),
                     jsonObject.getString("payer"),
                     jsonObject.getString("description"),
@@ -218,8 +288,6 @@ class FinancesOverviewFragment : Fragment() {
 
         var cashUpArrays = mutableListOf<JSONArray>()
         var months = mutableListOf<String>()
-
-        var financesHistoryStorage = storage.reference
 
         //cashUpFinanceData.putBytes(financeEntries.toString().toByteArray())
 
