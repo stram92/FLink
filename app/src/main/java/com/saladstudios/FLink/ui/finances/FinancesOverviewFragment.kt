@@ -105,7 +105,7 @@ class FinancesOverviewFragment : Fragment() {
                 loadedArchive = ""
                 loadedArchiveNumber = 0
 
-                if (financeEntries.length()<10) {
+                if (financeEntries.length()<=10) {
                     downloadFinished = false
                     initialLoadArchive()
                 }
