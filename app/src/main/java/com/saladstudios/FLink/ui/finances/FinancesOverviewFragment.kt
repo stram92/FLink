@@ -26,6 +26,9 @@ import com.saladstudios.FLink.utility.json.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.nio.charset.StandardCharsets
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class FinancesOverviewFragment : Fragment() {
@@ -76,7 +79,7 @@ class FinancesOverviewFragment : Fragment() {
                     }
                     financeEntries.put(newEntry)
                 }
-                financeEntries = sortJsonObject(financeEntries)
+                financeEntries = sortJsonArray(financeEntries)
                 financesRecyclerView.adapter=refreshFinances(view.context)
             }
 
@@ -134,6 +137,9 @@ class FinancesOverviewFragment : Fragment() {
             binding.textFinancesDebtor.text = getString(R.string.sascha_colon)
             payedAmount *= -1
             binding.textFinancesDebts.text = prettyPrintNumberWithCurrency(payedAmount.toString())
+        } else {
+            binding.textFinancesDebtor.text = ""
+            binding.textFinancesDebts.text = prettyPrintNumberWithCurrency("0.00")
         }
         binding.textFinancesDebts.setAutoSizeTextTypeUniformWithConfiguration(1,24,1,TypedValue.COMPLEX_UNIT_DIP)
         binding.textFinancesDebtor.setAutoSizeTextTypeUniformWithConfiguration(1,24,1,TypedValue.COMPLEX_UNIT_DIP)
@@ -207,11 +213,76 @@ class FinancesOverviewFragment : Fragment() {
     }
 
     private fun financesDoCashUp(context: Context) {
+        val entryDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        var jsonArray = JSONArray()
+
+        var cashUpArrays = mutableListOf<JSONArray>()
+        var months = mutableListOf<String>()
+
         var financesHistoryStorage = storage.reference
 
-        val cashUpFinanceData = financesHistoryStorage.child("$family/$module/entries/financeData.json")
+        //cashUpFinanceData.putBytes(financeEntries.toString().toByteArray())
 
-        cashUpFinanceData.putBytes("Testfile".toByteArray())
+        for (i in financeEntries.length()-1 downTo 0) {
+            val jsonObject = financeEntries.getJSONObject(i)
+            val date = LocalDate.parse(jsonObject.getString("entryDate"),entryDateFormat)
+
+            if (!months.contains(date.year.toString()+date.monthValue.toString())) {
+                months.add(date.year.toString()+date.monthValue.toString().padStart(2,'0'))
+
+                if (i != financeEntries.length()-1) {
+                    cashUpArrays.add(jsonArray)
+                }
+
+                jsonArray = JSONArray()
+            }
+
+            jsonArray.put(jsonObject)
+        }
+
+        cashUpArrays.add(jsonArray)
+
+        for (i in 0 until months.size) {
+            val month = months[i]
+            val cashUpFinanceData = financesHistoryStorage.child("$family/$module/entries/$month.json")
+
+            cashUpFinanceData.getBytes(1024*1024).addOnSuccessListener {
+                val jsonString = String(it,StandardCharsets.UTF_8)
+                var jsonArray = getJsonArray(jsonString)
+
+                jsonArray = jsonArray?.let { it1 -> mergeJsonArrays(it1,cashUpArrays[i]) }
+
+                cashUpFinanceData.delete().addOnSuccessListener {
+                    if (jsonArray!=null) {
+                        cashUpFinanceData.putBytes(jsonArray.toString().toByteArray())
+
+                        for (i in jsonArray!!.length()-1 downTo 0) {
+                            val jsonObject = jsonArray!!.getJSONObject(i)
+                            flatBase.child(jsonObject.getString("id")).removeValue()
+                        }
+                    }
+                }.addOnFailureListener {
+                    AlertDialog.Builder(context)
+                        .setTitle(R.string.cash_up_error_title)
+                        .setMessage((R.string.cash_up_error_message).toString() + month)
+                        .setIcon(android.R.drawable.ic_delete)
+                        .setPositiveButton(R.string.ok,null)
+                        .show()
+                }
+            }.addOnFailureListener {
+                if (it.toString() == "com.google.firebase.storage.StorageException: Object does not exist at location.") {
+                    cashUpFinanceData.putBytes(cashUpArrays[i].toString().toByteArray())
+                } else {
+                    AlertDialog.Builder(context)
+                        .setTitle(R.string.cash_up_error_title)
+                        .setMessage((R.string.cash_up_error_message).toString() + month)
+                        .setIcon(android.R.drawable.ic_delete)
+                        .setPositiveButton(R.string.ok,null)
+                        .show()
+                }
+            }
+
+        }
 
         AlertDialog.Builder(context)
             .setTitle(R.string.cash_up_notification_title)
