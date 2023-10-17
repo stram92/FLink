@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -89,18 +90,22 @@ class FinancesOverviewFragment : Fragment() {
                     }
                     financeEntries.put(newEntry)
                 }
-                if (financeEntries.length()>0) {
-                    financeEntries = sortJsonArray(financeEntries)
 
-                    entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
-                        financesEdit(
-                            view.context,
-                            item
-                        )
-                    }
+                financeEntries = sortJsonArray(financeEntries)
 
-                    financesRecyclerView.adapter = entryAdapter
-                } else {
+                entryAdapter = FinancesEntryAdapter(refreshFinances(financeEntries)) { item ->
+                    financesEdit(
+                        view.context,
+                        item
+                    )
+                }
+
+                financesRecyclerView.adapter = entryAdapter
+
+                loadedArchive = ""
+                loadedArchiveNumber = 0
+
+                if (financeEntries.length()<10) {
                     downloadFinished = false
                     initialLoadArchive()
                 }
@@ -112,7 +117,8 @@ class FinancesOverviewFragment : Fragment() {
         }
 
         flatBase.addValueEventListener(postListener)
-        entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
+
+        entryAdapter = FinancesEntryAdapter(refreshFinances(JSONArray())) { item ->
             financesEdit(
                 view.context,
                 item
@@ -161,12 +167,12 @@ class FinancesOverviewFragment : Fragment() {
 
     }
 
-    private fun refreshFinances () : ArrayList<FinancesItemsViewModel>{
+    private fun refreshFinances (financeEntryArray: JSONArray) : ArrayList<FinancesItemsViewModel>{
         val financesData = ArrayList<FinancesItemsViewModel>()
         var payedAmount = 0.00
 
-        for (i in financeEntries.length()-1 downTo 0)  {
-            val jsonObject = financeEntries.getJSONObject(i)
+        for (i in financeEntryArray.length()-1 downTo 0)  {
+            val jsonObject = financeEntryArray.getJSONObject(i)
 
             financesData.add(FinancesItemsViewModel(jsonObject.getString("id"),
                     jsonObject.getString("payer"),
@@ -261,13 +267,6 @@ class FinancesOverviewFragment : Fragment() {
                 }
             }
         }
-
-        entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
-            financesEdit(
-                binding.root.context,
-                item
-            )
-        }
     }
 
     private fun financesCashUp (context: Context) {
@@ -361,6 +360,8 @@ class FinancesOverviewFragment : Fragment() {
     }
 
     private fun initialLoadArchive () {
+        files = mutableListOf()
+
         archiveFileBase.listAll().addOnSuccessListener { it ->
             for (item in it.items) {
                 files.add(item.toString().substringAfter("entries/"))
