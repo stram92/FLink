@@ -89,16 +89,21 @@ class FinancesOverviewFragment : Fragment() {
                     }
                     financeEntries.put(newEntry)
                 }
-                financeEntries = sortJsonArray(financeEntries)
+                if (financeEntries.length()>0) {
+                    financeEntries = sortJsonArray(financeEntries)
 
-                entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
-                    financesEdit(
-                        view.context,
-                        item
-                    )
+                    entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
+                        financesEdit(
+                            view.context,
+                            item
+                        )
+                    }
+
+                    financesRecyclerView.adapter = entryAdapter
+                } else {
+                    downloadFinished = false
+                    initialLoadArchive()
                 }
-
-                financesRecyclerView.adapter=entryAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -126,27 +131,7 @@ class FinancesOverviewFragment : Fragment() {
                         downloadFinished = false
 
                         if (loadedArchive == "") {
-                            archiveFileBase.listAll().addOnSuccessListener { it ->
-                                for (item in it.items) {
-                                    files.add(item.toString().substringAfter("entries/"))
-                                }
-
-                                files.sortDescending()
-                                loadedArchive=files[loadedArchiveNumber]
-
-                                val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
-
-                                downloadArchive.getBytes(1024*1024).addOnSuccessListener { it1 ->
-                                    val jsonString = String(it1,StandardCharsets.UTF_8)
-                                    val jsonArray = getJsonArray(jsonString)
-
-                                    if (jsonArray != null) {
-                                        entryAdapter.addItems(jsonArray)
-                                    }
-
-                                    downloadFinished = true
-                                }
-                            }
+                            initialLoadArchive()
                         } else {
                             if (loadedArchiveNumber+1 < files.size) {
                                 loadedArchiveNumber++
@@ -373,5 +358,29 @@ class FinancesOverviewFragment : Fragment() {
             .setIcon(android.R.drawable.checkbox_on_background)
             .setPositiveButton(R.string.ok,null)
             .show()
+    }
+
+    private fun initialLoadArchive () {
+        archiveFileBase.listAll().addOnSuccessListener { it ->
+            for (item in it.items) {
+                files.add(item.toString().substringAfter("entries/"))
+            }
+
+            files.sortDescending()
+            loadedArchive=files[loadedArchiveNumber]
+
+            val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
+
+            downloadArchive.getBytes(1024*1024).addOnSuccessListener { it1 ->
+                val jsonString = String(it1,StandardCharsets.UTF_8)
+                val jsonArray = getJsonArray(jsonString)
+
+                if (jsonArray != null) {
+                    entryAdapter.addItems(jsonArray)
+                }
+
+                downloadFinished = true
+            }
+        }
     }
 }
