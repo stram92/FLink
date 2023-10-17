@@ -5,14 +5,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.style.TabStopSpan.Standard
 import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView.OnScrollListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -27,7 +25,6 @@ import com.saladstudios.FLink.utility.format.prettyPrintNumberWithCurrency
 import com.saladstudios.FLink.utility.json.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
 import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -36,6 +33,8 @@ import java.util.*
 class FinancesOverviewFragment : Fragment() {
     private lateinit var binding: FragmentFinancesOverviewBinding
     private lateinit var financesIntent: Intent
+
+    private lateinit var entryAdapter: FinancesEntryAdapter
 
     private var LAUNCH_NEW_ENTRY = 1
     private var LAUNCH_EDIT_ENTRY = 2
@@ -91,7 +90,15 @@ class FinancesOverviewFragment : Fragment() {
                     financeEntries.put(newEntry)
                 }
                 financeEntries = sortJsonArray(financeEntries)
-                financesRecyclerView.adapter=refreshFinances(view.context)
+
+                entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
+                    financesEdit(
+                        view.context,
+                        item
+                    )
+                }
+
+                financesRecyclerView.adapter=entryAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -100,27 +107,31 @@ class FinancesOverviewFragment : Fragment() {
         }
 
         flatBase.addValueEventListener(postListener)
+        entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
+            financesEdit(
+                view.context,
+                item
+            )
+        }
 
-        financesRecyclerView.adapter = refreshFinances (view.context)
+        financesRecyclerView.adapter = entryAdapter
 
         financesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (downloadFinished) {
-                    if (linearLayoutManager.findLastVisibleItemPosition() == financeEntries.length()-1) {
+                    if (linearLayoutManager.findLastVisibleItemPosition() == entryAdapter.itemCount-1) {
 
                         downloadFinished = false
 
                         if (loadedArchive == "") {
                             archiveFileBase.listAll().addOnSuccessListener { it ->
                                 for (item in it.items) {
-                                    Log.d("FLinkTest", item.toString().substringAfter("entries/"))
                                     files.add(item.toString().substringAfter("entries/"))
                                 }
 
                                 files.sortDescending()
-                                Log.d("FLinkTest", files.size.toString())
                                 loadedArchive=files[loadedArchiveNumber]
 
                                 val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
@@ -129,9 +140,9 @@ class FinancesOverviewFragment : Fragment() {
                                     val jsonString = String(it1,StandardCharsets.UTF_8)
                                     val jsonArray = getJsonArray(jsonString)
 
-                                    financeEntries=jsonArray?.let { it2 -> mergeJsonArrays(financeEntries, it2) }!!
-
-                                    financesRecyclerView.adapter=refreshFinances(view.context)
+                                    if (jsonArray != null) {
+                                        entryAdapter.addItems(jsonArray)
+                                    }
 
                                     downloadFinished = true
                                 }
@@ -147,9 +158,9 @@ class FinancesOverviewFragment : Fragment() {
                                     val jsonString = String(it,StandardCharsets.UTF_8)
                                     val jsonArray = getJsonArray(jsonString)
 
-                                    financeEntries=jsonArray?.let { it1 -> mergeJsonArrays(financeEntries, it1) }!!
-
-                                    financesRecyclerView.adapter=refreshFinances(view.context)
+                                    if (jsonArray != null) {
+                                        entryAdapter.addItems(jsonArray)
+                                    }
 
                                     downloadFinished = true
                                 }
@@ -165,14 +176,13 @@ class FinancesOverviewFragment : Fragment() {
 
     }
 
-    private fun refreshFinances (context: Context) : FinancesEntryAdapter{
+    private fun refreshFinances () : ArrayList<FinancesItemsViewModel>{
         val financesData = ArrayList<FinancesItemsViewModel>()
         var payedAmount = 0.00
 
         for (i in financeEntries.length()-1 downTo 0)  {
             val jsonObject = financeEntries.getJSONObject(i)
 
-            Log.d("FLinkTest", jsonObject.getString("id"))
             financesData.add(FinancesItemsViewModel(jsonObject.getString("id"),
                     jsonObject.getString("payer"),
                     jsonObject.getString("description"),
@@ -214,7 +224,7 @@ class FinancesOverviewFragment : Fragment() {
         binding.textFinancesDebts.setAutoSizeTextTypeUniformWithConfiguration(1,24,1,TypedValue.COMPLEX_UNIT_DIP)
         binding.textFinancesDebtor.setAutoSizeTextTypeUniformWithConfiguration(1,24,1,TypedValue.COMPLEX_UNIT_DIP)
 
-        return FinancesEntryAdapter(financesData) { item -> financesEdit(context,item) }
+        return financesData
     }
 
     private fun financesAdd(context: Context) {
@@ -267,7 +277,12 @@ class FinancesOverviewFragment : Fragment() {
             }
         }
 
-        financesRecyclerView.adapter = refreshFinances(binding.root.context)
+        entryAdapter = FinancesEntryAdapter(refreshFinances()) { item ->
+            financesEdit(
+                binding.root.context,
+                item
+            )
+        }
     }
 
     private fun financesCashUp (context: Context) {
