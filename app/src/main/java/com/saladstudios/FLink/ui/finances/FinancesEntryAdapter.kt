@@ -1,9 +1,11 @@
 package com.saladstudios.FLink.ui.finances
 
 
+import android.app.ActionBar.LayoutParams
 import android.content.ClipData.Item
 import android.graphics.Color
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.utility.format.prettyPrintNumberWithCurrency
@@ -24,6 +27,10 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.finances_entry_design, parent, false)
 
+        val lp = RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        lp.setMargins(0,20,0,0)
+        view.layoutParams = lp
+
         return ViewHolder(view)
     }
 
@@ -33,6 +40,8 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
         val ItemViewModel = mList[position]
 
         val res = holder.itemView.context.resources
+        val scale = res.displayMetrics.density
+
 
         holder.payer.text = ItemViewModel.payer
         holder.description.text = ItemViewModel.description
@@ -40,28 +49,40 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
         holder.amount.text = ItemViewModel.payedForAmount
         holder.entryDate.text = ItemViewModel.entryDate
 
+        holder.framePayer.visibility = View.VISIBLE
+        holder.payer.visibility = View.VISIBLE
+        holder.payedForAmount.visibility = View.VISIBLE
+        holder.financesBoth.visibility = View.VISIBLE
+        holder.financesAmountLayout.visibility = View.VISIBLE
+
+        //Calculation of DP using display scale
+        holder.financesEntryText.layoutParams.width = ((200*scale + 0.5f).toInt())
+
         if (holder.payer.text.equals("D")) {
             holder.framePayer.background = res.getDrawable(R.drawable.frame_denise)
             holder.financesFrame.background = res.getDrawable(R.drawable.frame_denise)
-            holder.payer.visibility = View.VISIBLE
             holder.financesBoth.visibility = View.GONE
         } else if (holder.payer.text.equals("S")) {
             holder.framePayer.background = res.getDrawable(R.drawable.frame_sascha)
             holder.financesFrame.background = res.getDrawable(R.drawable.frame_sascha)
-            holder.payer.visibility = View.VISIBLE
             holder.financesBoth.visibility = View.GONE
-        } else {
+        } else if (holder.payer.text.equals("CASHUP")) {
+            holder.financesFrame.background = res.getDrawable(R.drawable.frame_cashup)
+            holder.financesAmountLayout
+            holder.framePayer.visibility = View.GONE
+            holder.payedForAmount.visibility = View.GONE
+            holder.financesAmountLayout.visibility = View.GONE
+            holder.financesEntryText.layoutParams.width = ((105*scale + 0.5f).toInt())
+        }
+        else {
             holder.framePayer.background = res.getDrawable(R.drawable.frame_both)
             holder.financesFrame.background = res.getDrawable(R.drawable.frame_both)
             holder.payer.text = null
             holder.payer.visibility = View.GONE
-            holder.financesBoth.visibility = View.VISIBLE
         }
 
         if (holder.payedForAmount.text.isEmpty()) {
             holder.payedForAmount.visibility = View.GONE
-        } else {
-            holder.payedForAmount.visibility = View.VISIBLE
         }
 
         if (ItemViewModel.sign == "-") {
@@ -71,7 +92,12 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
         }
 
         holder.bind(ItemViewModel)
-        holder.itemView.setOnClickListener { listener(ItemViewModel) }
+
+        if (!holder.payer.text.equals("CASHUP")) {
+            holder.itemView.setOnClickListener { listener(ItemViewModel) }
+        } else {
+            holder.itemView.setOnClickListener { null }
+        }
     }
 
     // return the number of the items in the list
@@ -89,6 +115,8 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
         val framePayer: FrameLayout = itemView.findViewById(R.id.financesEntryIcon)
         val financesFrame: FrameLayout = itemView.findViewById(R.id.financesFrame)
         val financesBoth: ImageView = itemView.findViewById(R.id.financesBoth)
+        val financesAmountLayout: ConstraintLayout = itemView.findViewById(R.id.financesAmountLayout)
+        val financesEntryText: ConstraintLayout = itemView.findViewById(R.id.financesEntryText)
 
         fun bind (item: FinancesItemsViewModel) {
             payer.text = item.payer
@@ -121,8 +149,8 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
                 jsonObject.getString("sign"),
                 jsonObject.getString("amount"),
                 jsonObject.getString("entryDate"),
-                jsonObject.getString("payedFor"),
-                jsonObject.getString("payedForAmount"),
+                jsonObject.optString("payedFor"),
+                jsonObject.optString("payedForAmount"),
                 jsonObject.optString("category","…")))
         }
 

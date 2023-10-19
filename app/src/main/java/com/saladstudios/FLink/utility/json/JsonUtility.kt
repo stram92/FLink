@@ -6,6 +6,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.text.SimpleDateFormat
+import kotlin.math.sign
 
 private const val fileName = "financesdata.json"
 
@@ -30,6 +31,30 @@ fun getJsonArray(jsonString: String): JSONArray? {
     val jsonArray = JSONArray(jsonString)
 
     return sortJsonArray(jsonArray)
+}
+
+fun getCashUpJsonArray(jsonString: String, fileName: String): JSONArray? {
+    var jsonArray = JSONArray(jsonString)
+    val cashUpJsonArray = JSONArray()
+    val period = fileName.substringBefore(".json")
+
+    val cashUp = JSONObject()
+    cashUp.put("id", period)
+    cashUp.put("payer", "CASHUP")
+    cashUp.put("description", "Archiv $period")
+    cashUp.put("sign", "=")
+    cashUp.put("amount", "0")
+    cashUp.put("entryDate", period)
+
+    jsonArray = sortJsonArray(jsonArray)
+
+    for (i in jsonArray.length()-1 downTo 0) {
+        cashUpJsonArray.put(jsonArray[i])
+    }
+
+    cashUpJsonArray.put(cashUp)
+
+    return cashUpJsonArray
 }
 
 fun mergeJsonArrays(first: JSONArray, second: JSONArray): JSONArray {

@@ -40,8 +40,8 @@ class FinancesOverviewFragment : Fragment() {
     private var LAUNCH_NEW_ENTRY = 1
     private var LAUNCH_EDIT_ENTRY = 2
 
-    private val family = "development"
-    //private val family = "FLink"
+    //private val family = "development"
+    private val family = "FLink"
     private val module = "finances"
 
     private val database = Firebase.database("https://flink-3c91d-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -147,7 +147,7 @@ class FinancesOverviewFragment : Fragment() {
 
                                 downloadArchive.getBytes(1024*1024).addOnSuccessListener {
                                     val jsonString = String(it,StandardCharsets.UTF_8)
-                                    val jsonArray = getJsonArray(jsonString)
+                                    val jsonArray = getCashUpJsonArray(jsonString,loadedArchive)
 
                                     if (jsonArray != null) {
                                         entryAdapter.addItems(jsonArray)
@@ -367,21 +367,25 @@ class FinancesOverviewFragment : Fragment() {
                 files.add(item.toString().substringAfter("entries/"))
             }
 
-            files.sortDescending()
-            loadedArchive=files[loadedArchiveNumber]
 
-            val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
+            if (files.size > 0){
+                files.sortDescending()
+                loadedArchive = files[loadedArchiveNumber]
 
-            downloadArchive.getBytes(1024*1024).addOnSuccessListener { it1 ->
-                val jsonString = String(it1,StandardCharsets.UTF_8)
-                val jsonArray = getJsonArray(jsonString)
+                val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
 
-                if (jsonArray != null) {
-                    entryAdapter.addItems(jsonArray)
+                downloadArchive.getBytes(1024*1024).addOnSuccessListener { it1 ->
+                    val jsonString = String(it1,StandardCharsets.UTF_8)
+                    val jsonArray = getCashUpJsonArray(jsonString,loadedArchive)
+
+                    if (jsonArray != null) {
+                        entryAdapter.addItems(jsonArray)
+                    }
+
                 }
-
-                downloadFinished = true
             }
+
+            downloadFinished = true
         }
     }
 }
