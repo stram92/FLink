@@ -37,17 +37,17 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val ItemViewModel = mList[position]
+        val itemViewModel = mList[position]
 
         val res = holder.itemView.context.resources
         val scale = res.displayMetrics.density
 
 
-        holder.payer.text = ItemViewModel.payer
-        holder.description.text = ItemViewModel.description
-        holder.payedForAmount.text = ItemViewModel.payedForAmount
-        holder.amount.text = ItemViewModel.payedForAmount
-        holder.entryDate.text = ItemViewModel.entryDate
+        holder.payer.text = itemViewModel.payer
+        holder.description.text = itemViewModel.description
+        holder.payedForAmount.text = itemViewModel.payedForAmount
+        holder.amount.text = itemViewModel.payedForAmount
+        holder.entryDate.text = itemViewModel.entryDate
 
         holder.framePayer.visibility = View.VISIBLE
         holder.payer.visibility = View.VISIBLE
@@ -85,16 +85,16 @@ class FinancesEntryAdapter(private var mList: MutableList<FinancesItemsViewModel
             holder.payedForAmount.visibility = View.GONE
         }
 
-        if (ItemViewModel.sign == "-") {
+        if (itemViewModel.sign == "-") {
             holder.payedForAmount.setTextColor(Color.RED)
         } else {
             holder.payedForAmount.setTextColor(Color.GREEN)
         }
 
-        holder.bind(ItemViewModel)
+        holder.bind(itemViewModel)
 
         if (!holder.payer.text.equals("CASHUP")) {
-            holder.itemView.setOnClickListener { listener(ItemViewModel) }
+            holder.itemView.setOnClickListener { listener(itemViewModel) }
         } else {
             holder.itemView.setOnClickListener { null }
         }
