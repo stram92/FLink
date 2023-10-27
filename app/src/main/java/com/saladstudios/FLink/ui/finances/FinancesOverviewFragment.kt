@@ -408,9 +408,6 @@ class FinancesOverviewFragment : Fragment() {
 
                 val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
 
-
-                Log.d("FLinkTest",loadedArchive)
-
                 downloadArchive.getBytes(1024*1024).addOnSuccessListener { it1 ->
                     val jsonString = String(it1,StandardCharsets.UTF_8)
                     val jsonArray = getCashUpJsonArray(jsonString,loadedArchive)
