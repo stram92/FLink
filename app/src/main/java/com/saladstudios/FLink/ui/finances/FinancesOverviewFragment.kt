@@ -13,12 +13,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.internal.Storage
+import com.google.firebase.FirebaseException
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import com.saladstudios.FLink.R
 import com.saladstudios.FLink.databinding.FragmentFinancesOverviewBinding
@@ -60,6 +63,42 @@ class FinancesOverviewFragment : Fragment() {
 
     private lateinit var financesRecyclerView: RecyclerView
 
+    private val postListener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            financeEntries = JSONArray()
+            for (financeEntry in snapshot.children) {
+                val newEntry = JSONObject()
+                newEntry.put("id", financeEntry.key.toString())
+                for (values in financeEntry.children) {
+                    newEntry.put(values.key.toString(), values.value.toString())
+                }
+                financeEntries.put(newEntry)
+            }
+
+            financeEntries = sortJsonArray(financeEntries)
+
+            entryAdapter = FinancesEntryAdapter(refreshFinances(financeEntries)) { item ->
+                financesEdit(
+                    view!!.context,
+                    item
+                )
+            }
+
+            financesRecyclerView.adapter = entryAdapter
+
+            loadedArchive = ""
+            loadedArchiveNumber = 0
+
+            if (financeEntries.length()<=10) {
+                initialLoadArchive()
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w("FLinkWarning", "loadPost: onCancelled", error.toException())
+        }
+    }
+
     @Override
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,43 +117,6 @@ class FinancesOverviewFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(view.context)
         financesRecyclerView.layoutManager = linearLayoutManager
         financesRecyclerView.setHasFixedSize(true)
-
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                financeEntries = JSONArray()
-                for (financeEntry in snapshot.children) {
-                    val newEntry = JSONObject()
-                    newEntry.put("id", financeEntry.key.toString())
-                    for (values in financeEntry.children) {
-                        newEntry.put(values.key.toString(), values.value.toString())
-                    }
-                    financeEntries.put(newEntry)
-                }
-
-                financeEntries = sortJsonArray(financeEntries)
-
-                entryAdapter = FinancesEntryAdapter(refreshFinances(financeEntries)) { item ->
-                    financesEdit(
-                        view.context,
-                        item
-                    )
-                }
-
-                financesRecyclerView.adapter = entryAdapter
-
-                loadedArchive = ""
-                loadedArchiveNumber = 0
-
-                if (financeEntries.length()<=10) {
-                    downloadFinished = false
-                    initialLoadArchive()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("FLinkWarning", "loadPost: onCancelled", error.toException())
-            }
-        }
 
         flatBase.addValueEventListener(postListener)
 
@@ -290,89 +292,124 @@ class FinancesOverviewFragment : Fragment() {
 
         //cashUpFinanceData.putBytes(financeEntries.toString().toByteArray())
 
-        for (i in financeEntries.length()-1 downTo 0) {
-            val jsonObject = financeEntries.getJSONObject(i)
-            val date = LocalDate.parse(jsonObject.getString("entryDate"),entryDateFormat)
+        if(financeEntries.length()==0) {
+            flatBase.addValueEventListener(postListener)
+            AlertDialog.Builder(context)
+                .setTitle(R.string.cash_up_nothing_to_do_title)
+                .setMessage(R.string.cash_up_nothing_to_do)
+                .setIcon(android.R.drawable.checkbox_on_background)
+                .setPositiveButton(R.string.ok,null)
+                .show()
+        } else {
+            for (i in financeEntries.length() - 1 downTo 0) {
+                val jsonObject = financeEntries.getJSONObject(i)
+                val date = LocalDate.parse(jsonObject.getString("entryDate"), entryDateFormat)
 
-            if (!months.contains(date.year.toString()+date.monthValue.toString())) {
-                months.add(date.year.toString()+date.monthValue.toString().padStart(2,'0'))
+                if (!months.contains(
+                        date.year.toString() + date.monthValue.toString().padStart(2, '0')
+                    )
+                ) {
+                    months.add(date.year.toString() + date.monthValue.toString().padStart(2, '0'))
 
-                if (i != financeEntries.length()-1) {
-                    cashUpArrays.add(jsonArray)
+                    if (i != financeEntries.length() - 1) {
+                        cashUpArrays.add(jsonArray)
+                    }
+
+                    jsonArray = JSONArray()
                 }
 
-                jsonArray = JSONArray()
+                jsonArray.put(jsonObject)
             }
 
-            jsonArray.put(jsonObject)
-        }
+            cashUpArrays.add(jsonArray)
 
-        cashUpArrays.add(jsonArray)
+            for (i in 0 until months.size) {
+                val month = months[i]
+                val cashUpFinanceData = financesHistoryStorage.child("$family/$module/entries")
 
-        for (i in 0 until months.size) {
-            val month = months[i]
-            val cashUpFinanceData = financesHistoryStorage.child("$family/$module/entries/$month.json")
+                cashUpFinanceData.child("$month.json").getBytes(1024 * 1024).addOnSuccessListener {
+                    val jsonString = String(it, StandardCharsets.UTF_8)
+                    var jsonArray = getJsonArray(jsonString)
 
-            cashUpFinanceData.getBytes(1024*1024).addOnSuccessListener {
-                val jsonString = String(it,StandardCharsets.UTF_8)
-                var jsonArray = getJsonArray(jsonString)
+                    jsonArray = jsonArray?.let { it1 -> mergeJsonArrays(it1, cashUpArrays[i]) }
 
-                jsonArray = jsonArray?.let { it1 -> mergeJsonArrays(it1,cashUpArrays[i]) }
+                    cashUpFinanceData.child("$month.json").delete().addOnSuccessListener {
+                        if (jsonArray != null) {
+                            cashUpFinanceData.child("$month.json")
+                                .putBytes(jsonArray.toString().toByteArray())
+                                .addOnCompleteListener {
+                                    for (j in jsonArray!!.length() - 1 downTo 0) {
+                                        val jsonObject = jsonArray!!.getJSONObject(j)
+                                        flatBase.child(jsonObject.getString("id")).removeValue()
+                                    }
 
-                cashUpFinanceData.delete().addOnSuccessListener {
-                    if (jsonArray!=null) {
-                        cashUpFinanceData.putBytes(jsonArray.toString().toByteArray())
-
-                        for (i in jsonArray!!.length()-1 downTo 0) {
-                            val jsonObject = jsonArray!!.getJSONObject(i)
-                            flatBase.child(jsonObject.getString("id")).removeValue()
+                                    if (months.last() == months[i]) {
+                                        AlertDialog.Builder(context)
+                                            .setTitle(R.string.cash_up_notification_title)
+                                            .setMessage(R.string.cash_up_notification_done)
+                                            .setIcon(android.R.drawable.checkbox_on_background)
+                                            .setPositiveButton(R.string.ok, null)
+                                            .show()
+                                    }
+                                }
                         }
+                    }.addOnFailureListener {
+                        AlertDialog.Builder(context)
+                            .setTitle(R.string.cash_up_error_title)
+                            .setMessage((R.string.cash_up_error_message).toString() + month)
+                            .setIcon(android.R.drawable.ic_delete)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
                     }
                 }.addOnFailureListener {
-                    AlertDialog.Builder(context)
-                        .setTitle(R.string.cash_up_error_title)
-                        .setMessage((R.string.cash_up_error_message).toString() + month)
-                        .setIcon(android.R.drawable.ic_delete)
-                        .setPositiveButton(R.string.ok,null)
-                        .show()
-                }
-            }.addOnFailureListener {
-                if (it.toString() == "com.google.firebase.storage.StorageException: Object does not exist at location.") {
-                    cashUpFinanceData.putBytes(cashUpArrays[i].toString().toByteArray())
-                } else {
-                    AlertDialog.Builder(context)
-                        .setTitle(R.string.cash_up_error_title)
-                        .setMessage((R.string.cash_up_error_message).toString() + month)
-                        .setIcon(android.R.drawable.ic_delete)
-                        .setPositiveButton(R.string.ok,null)
-                        .show()
+                    if (it.toString() == "com.google.firebase.storage.StorageException: Object does not exist at location.") {
+                        cashUpFinanceData.child("$month.json")
+                            .putBytes(cashUpArrays[i].toString().toByteArray())
+                            .addOnCompleteListener {
+                                for (j in cashUpArrays[i].length() - 1 downTo 0) {
+                                    val jsonObject = cashUpArrays[i].getJSONObject(j)
+                                    flatBase.child(jsonObject.getString("id")).removeValue()
+                                }
+
+                                if (months.last() == months[i]) {
+                                    AlertDialog.Builder(context)
+                                        .setTitle(R.string.cash_up_notification_title)
+                                        .setMessage(R.string.cash_up_notification_done)
+                                        .setIcon(android.R.drawable.checkbox_on_background)
+                                        .setPositiveButton(R.string.ok, null)
+                                        .show()
+                                }
+                            }
+                    } else {
+                        AlertDialog.Builder(context)
+                            .setTitle(R.string.cash_up_error_title)
+                            .setMessage((R.string.cash_up_error_message).toString() + month)
+                            .setIcon(android.R.drawable.ic_delete)
+                            .setPositiveButton(R.string.ok, null)
+                            .show()
+                    }
                 }
             }
-
         }
-
-        AlertDialog.Builder(context)
-            .setTitle(R.string.cash_up_notification_title)
-            .setMessage(R.string.cash_up_notification_done)
-            .setIcon(android.R.drawable.checkbox_on_background)
-            .setPositiveButton(R.string.ok,null)
-            .show()
     }
 
     private fun initialLoadArchive () {
         files = mutableListOf()
+        downloadFinished = false
 
         archiveFileBase.listAll().addOnSuccessListener { it ->
             for (item in it.items) {
                 files.add(item.toString().substringAfter("entries/"))
             }
 
-
             if (files.size > 0){
                 files.sortDescending()
                 loadedArchive = files[loadedArchiveNumber]
 
                 val downloadArchive = financesHistoryStorage.child("$family/$module/entries/$loadedArchive")
+
+
+                Log.d("FLinkTest",loadedArchive)
 
                 downloadArchive.getBytes(1024*1024).addOnSuccessListener { it1 ->
                     val jsonString = String(it1,StandardCharsets.UTF_8)

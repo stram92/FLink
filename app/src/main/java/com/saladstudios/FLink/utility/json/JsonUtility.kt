@@ -46,7 +46,7 @@ fun getCashUpJsonArray(jsonString: String, fileName: String): JSONArray? {
     cashUp.put("amount", "0")
     cashUp.put("entryDate", period)
 
-    jsonArray = sortJsonArray(jsonArray)
+    jsonArray = sortJsonArrayDescending(jsonArray)
 
     for (i in jsonArray.length()-1 downTo 0) {
         cashUpJsonArray.put(jsonArray[i])
@@ -147,6 +147,20 @@ fun sortJsonArray(input: JSONArray): JSONArray {
     val dateFormat = SimpleDateFormat("dd.MM.yyyy")
 
     jsonList.sortBy { dateFormat.parse(it.getString("entryDate")) }
+
+    return JSONArray(jsonList)
+}
+
+fun sortJsonArrayDescending(input: JSONArray): JSONArray {
+    val jsonList = mutableListOf<JSONObject>()
+
+    for (i in 0 until input.length()) {
+        jsonList.add(input.getJSONObject(i))
+    }
+
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy")
+
+    jsonList.sortByDescending { dateFormat.parse(it.getString("entryDate")) }
 
     return JSONArray(jsonList)
 }

@@ -55,6 +55,8 @@
     <string name="handy">Handy</string>
     <string name="cash_up_alert_title">Kassensturz durchführen?</string>
     <string name="cash_up_alert_message">Dadurch werden alle aktuellen Finanzeinträge zurückgesetzt und eine neue Abrechnung gestartet.</string>
+    <string name="cash_up_nothing_to_do_title">Keine Daten vorhanden</string>
+    <string name="cash_up_nothing_to_do">Es sind keine Daten zum Archivieren vorhanden.</string>
     <string name="cash_up_notification_title">Kassensturz erfolgreich!</string>
     <string name="cash_up_notification_done">Der Kassensturz wurde erfolgreich durchgeführt.</string>
     <string name="cash_up_error_title">Kassensturz fehlgeschlagen!</string>
